@@ -30,6 +30,18 @@
                     <input type="nama" class="form-control" placeholder="Nama" id="nama" name="nama" required>
                   </div>
                   <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" placeholder="Email" id="email" name="email" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Nomor HP</label>
+                    <input type="phone" class="form-control" placeholder="Nomor HP" id="phone" name="phone" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="birthdate" class="form-label">Tanggal Lahir</label>
+                    <input type="date" class="form-control" placeholder="Tanggal Lahir" id="birthdate" name="birthdate" required>
+                  </div>
+                  <div class="mb-3">
                     <label for="nim" class="form-label">NIM</label>
                     <input type="nim" class="form-control" placeholder="NIM" id="nim" name="nim" required>
                   </div>
