@@ -1,3 +1,16 @@
+<?php
+$servername = "localhost";
+$username = "root"; // sesuaikan dengan username database Anda
+$password = ""; // sesuaikan dengan password database Anda
+$dbname = "nim_authentication";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -7,6 +20,69 @@
   <title>Novatix</title>
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
+  <style>
+    .profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.profile-header h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.profile-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-info h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.profile-info p {
+    margin: 2px 0;
+    color: #666;
+}
+
+.personal-info, .address-info {
+    margin-bottom: 20px;
+}
+
+.personal-info h2, .address-info h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+p {
+    margin: 5px 0;
+}
+
+  </style>
 </head>
 
 <body>
@@ -119,7 +195,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="./profile.php?nim=<?php echo $_GET['nim']; ?>" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
                     </a>
@@ -131,7 +207,7 @@
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">My Task</p>
                     </a>
-                    <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="./index.php" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -140,13 +216,59 @@
         </nav>
       </header>
       <!--  Header End -->
-      <div class="container-fluid">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-            <p class="mb-0">This is a sample page </p>
-          </div>
-        </div>
+      <div class="container-fluid"> <div class="profile-header">
+      <h5 class="card-title fw-semibold mb-4">My Profile</h5>
+      <?php
+      $nim = $_GET['nim'];
+    $sql = "SELECT nama, email, nomor_hp, tanggal_lahir, foto_profil FROM users WHERE nim = '$nim'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            echo "<div class='card'><div class='card-body' style='display: flex; align-items: center;'>";
+            if(!empty($row['foto_profil'])){
+              echo "<img src='uploads/".$row['foto_profil']."' alt='Foto Mahasiswa' width='80' height='80' class='rounded-circle' style='margin-right: 50px'>";
+            } else {
+              echo "<img src='images/profile/user-1.jpg ' alt='Foto Mahasiswa' width='80' height='80' class='rounded-circle' style='margin-right: 50px'>";
+            }
+            echo "<div class='info' style='flex: 1;'>";
+            echo "<h3 style='margin-right: 200px'>" . $row["nama"] . "</h3>";
+            echo "<p>Mahasiswa</p>";  
+            if(empty($row['foto_profil'])){
+              echo "<label class='form-label'>Upload Foto Profil</p>";
+              echo "<form action='upload_foto.php?nim=" . $_GET['nim'] . "' method='post' enctype='multipart/form-data'>";
+              echo "<div><input type='file' class='form-control' id='foto_profil' name='foto_profil' required></div>";
+              echo "<button type='submit' class='btn btn-primary' style='margin-top: 20px;'>Upload</button>";
+              echo "</form>";
+            }          
+            echo "</div></div>";
+            echo "<div class='card-body'><div class='personal-info'>";
+            echo "<h4>Personal Information</h4><div class='info-grid'>";
+            function split_name($full_name) {
+              $name_parts = explode(" ", trim($full_name));
+              $first_name = $name_parts[0];
+              $last_name = isset($name_parts[1]) ? implode(" ", array_slice($name_parts, 1)) : "";
+              return array('first_name' => $first_name, 'last_name' => $last_name);
+          }
+          $name = split_name($row['nama']);
+            echo "<div><label>First Name</label><p>" . $name['first_name'] . "</p></div>";
+            echo "<div><label>Last Name</label><p>" . $name['last_name'] . "</p></div>";
+            echo "<div><label>Email</label><p>" . $row['email'] . "</p></div>";
+            echo "<div><label>Phone</label><p>" . $row['nomor_hp'] . "</p></div>";
+            echo "</div></div>";
+            echo "<div class='address-info'><h4>Discourse</h4>";
+            echo "<div class='info-grid'>";
+            echo "<div><label>Prodi</label><p>Teknik Multimedia dan Jaringan</p></div>";
+            echo "<div><label>Jurusan</label><p>Teknik Informatika dan Komputer</p></div>";
+            echo "<div><label>Kampus</label><p>Politeknik Negeri Ujung Pandang</p></div></div></div>";
+            if(empty($row['foto_profil'])){
+              echo "<div><i class='ti ti-alert-octagon text-danger' style='margin-right: 20px;'></i><h7 class='fw-semibold mb-3'>Anda belum mengupload foto profil</h7></div>";
+            }
+        }
+    } else {
+        echo "<p>Tidak ada data mahasiswa</p>";
+    }
+    ?>
       </div>
     </div>
   </div>
