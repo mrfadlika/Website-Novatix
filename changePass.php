@@ -7,14 +7,6 @@
   <title>Novatix</title>
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
-  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
-  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
-  <style>
-        #calendar {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-    </style>
 </head>
 
 <body>
@@ -41,7 +33,7 @@
               <span class="hide-menu">Home</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./main.php?nim=<?php echo $_GET['nim']; ?>" aria-expanded="false">
+              <a class="sidebar-link" href="main.php?nim=<?php echo $_GET['nim'];?>" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -53,7 +45,7 @@
               <span class="hide-menu">TASK & EXAM</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-buttons.php?nim=<?php echo $_GET['nim'];?>" aria-expanded="false">
+              <a class="sidebar-link" href="ui-buttons.php?nim=<?php echo $_GET['nim']; ?>" aria-expanded="false">
                 <span>
                   <i class="ti ti-article"></i>
                 </span>
@@ -152,37 +144,26 @@
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Calendar</h5>
-              <a type="button" href="add_event.php?nim=<?php echo $_GET['nim']; ?>" class="btn btn-outline-secondary m-1" style="margin-bottom: 500px">Tambahkan Event</a>
-              <div id="calendar" style="margin-top: 50px"></div>
-              <!-- <div class="card mb-0">
-                <div class="card-body p-4">
-                  <div class="alert alert-primary" role="alert">
-                    A simple primary alert—check it out!
-                  </div>
-                  <div class="alert alert-secondary" role="alert">
-                    A simple secondary alert—check it out!
-                  </div>
-                  <div class="alert alert-success" role="alert">
-                    A simple success alert—check it out!
-                  </div>
-                  <div class="alert alert-danger" role="alert">
-                    A simple danger alert—check it out!
-                  </div>
-                  <div class="alert alert-warning" role="alert">
-                    A simple warning alert—check it out!
-                  </div>
-                  <div class="alert alert-info" role="alert">
-                    A simple info alert—check it out!
-                  </div>
-                  <div class="alert alert-light" role="alert">
-                    A simple light alert—check it out!
-                  </div>
-                  <div class="alert alert-dark" role="alert">
-                    A simple dark alert—check it out!
-                  </div>
+              <h5 class="card-title fw-semibold mb-4">Ganti Password</h5>
+              <div class="card">
+                <div class="card-body">
+                  <form id="changePasswordForm" action="ganti_password.php?nim=<?php echo $_GET['nim']; ?>" method="post">
+                    <div class="mb-3">
+                      <label for="old_password" class="form-label">Password Lama</label>
+                      <input type="password" class="form-control" id="old_password" name="old_password" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="new_password" class="form-label">Password Baru</label>
+                      <input type="password" class="form-control" id="new_password" name="new_password" required disabled>
+                    </div>
+                    <div class="mb-3">
+                      <label for="confirm_password" class="form-label">Ulangi Password Baru</label>
+                      <input type="password" class="form-control" id="confirm_password" name="confirm_password" required disabled>
+                    </div>
+                    <button type="submit" id="submit" disabled class="btn btn-primary">Submit</button>
+                  </form>
                 </div>
-              </div> -->
+              </div>
             </div>
           </div>
         </div>
@@ -190,16 +171,28 @@
     </div>
   </div>
   <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: './events.php'
-            });
+        document.getElementById('old_password').addEventListener('blur', function() {
+        var passwordLama = this.value;
 
-            calendar.render();
+        fetch('db_password.php?nim=<?php echo $_GET['nim']; ?>', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'old_password=' + encodeURIComponent(passwordLama)
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data === 'valid') {
+                document.getElementById('new_password').disabled = false;
+                document.getElementById('confirm_password').disabled = false;
+                document.getElementById('submit').disabled = false;
+            } else {
+                alert('Password lama salah.');
+            }
         });
-    </script>
+    });
+  </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>
