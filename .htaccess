@@ -1,0 +1,22 @@
+# Mengaktifkan mod_rewrite
+RewriteEngine On
+
+# Jangan proses file-file berikut
+RewriteCond %{REQUEST_URI} \.(css|js|png|jpg|gif|ico|svg|min.js|min.css)$ [NC]
+RewriteRule .* - [L]
+
+# Jika URL mengarah ke direktori, arahkan ke index.php
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.*)/$ $1/index.php [L]
+
+# Jika URL kosong atau mengarah ke direktori root, arahkan ke index.php
+RewriteRule ^$ index.php [L]
+
+# Jika file PHP yang diminta ada, arahkan ke file tersebut
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Jika tidak ada file yang sesuai, arahkan ke 404.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ 404.php [L]
