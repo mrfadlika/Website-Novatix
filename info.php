@@ -22,7 +22,7 @@ if ($conn->connect_error) {
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <style>
-.card a {
+.card a { 
             text-decoration: none;
             color: white;
             background-color: #25D366;
