@@ -37,6 +37,7 @@ $conn->close();
   <link rel="stylesheet" href="css/styles.min.css" />
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <style>
         #calendar {
             max-width: 900px;
@@ -187,7 +188,7 @@ $conn->close();
           <div class="card">
             <div class="card-body">
               <h5 class="card-title fw-semibold mb-4">Calendar</h5>
-              <a type="button" href="add_event" class="btn btn-outline-secondary m-1" style="margin-bottom: 500px">Tambahkan Event</a>
+              <a type="button" href="calendar/add_event" class="btn btn-outline-secondary m-1" style="margin-bottom: 500px">Tambahkan Event</a>
               <div id="calendar" style="margin-top: 50px"></div>
             </div>
           </div>
