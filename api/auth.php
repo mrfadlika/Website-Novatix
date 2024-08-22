@@ -29,7 +29,7 @@ try {
             if ($input_password === $stored_password) {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['nim'] = $nim;
-                $redirect_url = isset($_SESSION['redirect_url']) ? $_SESSION['redirect_url'] : 'index';
+                $redirect_url = isset($_SESSION['redirect_url']) ? $_SESSION['redirect_url'] : '../index';
                 unset($_SESSION['redirect_url']);
                 header('Location: ' . $redirect_url);
                 exit();

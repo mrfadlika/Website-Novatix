@@ -1,3 +1,4 @@
+<!-- disini tanda bahwa sayaa commit-->
 <?php
 session_start();
 
@@ -35,6 +36,7 @@ $conn->close();
   <title>Novatix</title>
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
 </head>
 
 <body>

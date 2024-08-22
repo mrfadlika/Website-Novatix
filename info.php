@@ -1,32 +1,4 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['nim'])) {
-  $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
-    header('Location: login'); 
-    exit();
-}
-
-$nim = $_SESSION['nim'];
-
-$conn = new mysqli('localhost', 'root', '', 'db_novatix');
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$sql = "SELECT * FROM users WHERE nim = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param('s', $nim);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-
-$stmt->close();
-$conn->close();
-?>
-
-<?php
 $servername = "localhost";
 $username = "nova"; 
 $password = "Raffifadlika!&55"; 
@@ -48,16 +20,9 @@ if ($conn->connect_error) {
   <title>Novatix</title>
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <style>
-/* .info-dosen {
-    width: 100%;
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-} */
-.card a {
+.card a { 
             text-decoration: none;
             color: white;
             background-color: #25D366;
@@ -66,66 +31,6 @@ if ($conn->connect_error) {
             display: inline-block;
             flex: 1;
         }
-/*.card-dosen {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.dosen-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-right: 20px;
-}
-
-.dosen-details {
-    flex: 1;
-}
-
-.dosen-details h3 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-.dosen-title {
-    display: inline-block;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    padding: 3px 8px;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    font-size: 0.875rem;
-}
-
-.dosen-details p {
-    margin: 0 0 10px;
-    font-size: 0.875rem;
-    color: #666;
-} */
-
-/* .btn-primary {
-    display: inline-block;
-    padding: 8px 16px;
-    font-size: 0.875rem;
-    color: #fff;
-    background-color: #28a745;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.btn-primary:hover {
-    background-color: #218838;
-} */
 .info-dosen {
     display: flex;
     justify-content: space-between;
@@ -197,9 +102,7 @@ if ($conn->connect_error) {
 </head>
 
 <body>
-  <!--  Body Wrapper -->
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
     <!-- Sidebar Start -->
     <aside class="left-sidebar">
       <!-- Sidebar scroll-->
@@ -222,7 +125,7 @@ if ($conn->connect_error) {
             <li class="sidebar-item">
               <a class="sidebar-link" href="index" aria-expanded="false">
                 <span>
-                  <i class="ti ti-layout-dashboard"></i>
+                  <i class="ti ti-home"></i>
                 </span>
                 <span class="hide-menu">Dashboard</span>
               </a>
@@ -234,7 +137,7 @@ if ($conn->connect_error) {
             <li class="sidebar-item">
               <a class="sidebar-link" href="assignment" aria-expanded="false">
                 <span>
-                  <i class="ti ti-article"></i>
+                  <i class="ti ti-list-check"></i>
                 </span>
                 <span class="hide-menu">Assignment</span>
               </a>
@@ -242,7 +145,7 @@ if ($conn->connect_error) {
             <li class="sidebar-item">
               <a class="sidebar-link" href="forms" aria-expanded="false">
                 <span>
-                  <i class="ti ti-file-description"></i>
+                  <i class="ti ti-file-upload"></i>
                 </span>
                 <span class="hide-menu">Forms</span>
               </a>
@@ -350,22 +253,19 @@ if ($conn->connect_error) {
             <button type="submit" class="btn btn-outline-primary w-100">Filter</button>
         </div>
     </form>
-</div>         
+</div>        
             <?php
             $servername = "localhost";
-            $username = "root";  // Sesuaikan dengan username database Anda
-            $password = "";      // Sesuaikan dengan password database Anda
-            $dbname = "db_novatix";  // Ganti dengan nama database Anda
+            $username = "root"; 
+            $password = "";     
+            $dbname = "db_novatix";  
             
-            // Membuat koneksi
             $conn = new mysqli($servername, $username, $password, $dbname);
             
-            // Memeriksa koneksi
             if ($conn->connect_error) {
                 die("Koneksi gagal: " . $conn->connect_error);
             }
 
-            // Ambil nilai filter search dan role
             $search = isset($_GET['search']) ? $_GET['search'] : '';
             $role = isset($_GET['role']) ? $_GET['role'] : '';
 
@@ -393,7 +293,7 @@ if ($conn->connect_error) {
                     echo "</div>";
                     echo "<p class='mb-0' style='padding-bottom: 20px'>0" . $row["nomor_hp"] . "</p>";
                     echo "</div>";
-                    echo "<button href='https://wa.me/62" . $row["nomor_hp"] . "' class='btn btn-primary'>Hubungi</a>";
+                    echo "<button onclick=\"window.location.href='https://wa.me/62" . $row["nomor_hp"] . "'\" class='btn btn-primary'>Hubungi</button>";
                     echo "</div>";
                     echo "</div>";
                 }
@@ -404,33 +304,14 @@ if ($conn->connect_error) {
             // Tutup koneksi database
             $conn->close();
             ?>
+            </div>
         </div>
     </div>
 </div>
-<script>
-function filterDosen() {
-    var input = document.getElementById('searchBar').value.toLowerCase();
-    var filter = document.getElementById('positionFilter').value;
-    var dosenList = document.getElementById('dosenList');
-    var dosenItems = dosenList.getElementsByClassName('info-dosen');
-
-    for (var i = 0; i < dosenItems.length; i++) {
-        var name = dosenItems[i].getAttribute('data-name').toLowerCase();
-        var position = dosenItems[i].getAttribute('data-position');
-
-        if ((name.includes(input) || input === '') && (position === filter || filter === '')) {
-            dosenItems[i].style.display = '';
-        } else {
-            dosenItems[i].style.display = 'none';
-        }
-    }
-}
-</script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>
   <script src="js/app.min.js"></script>
   <script src="libs/simplebar/dist/simplebar.js"></script>
 </body>
-
 </html>
