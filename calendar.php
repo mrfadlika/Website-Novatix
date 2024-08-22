@@ -187,7 +187,7 @@ $conn->close();
           <div class="card">
             <div class="card-body">
               <h5 class="card-title fw-semibold mb-4">Calendar</h5>
-              <a type="button" href="add_event" class="btn btn-outline-secondary m-1" style="margin-bottom: 500px">Tambahkan Event</a>
+              <a type="button" href="calendar/add_event" class="btn btn-outline-secondary m-1" style="margin-bottom: 500px">Tambahkan Event</a>
               <div id="calendar" style="margin-top: 50px"></div>
             </div>
           </div>

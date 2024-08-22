@@ -14,6 +14,9 @@ if ($uri == '') {
 elseif (file_exists($uri . '.php')) {
     require $uri . '.php';
 }
+elseif($uri == 'calendar/add_event'){
+    require 'add_event.php';
+}
 else {
     require '404.php';
 }
