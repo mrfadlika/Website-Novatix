@@ -1,3 +1,18 @@
+<?php
+$servername = "localhost";
+$username = "nova";
+$password = "Raffifadlika!&55";
+$dbname = "pengumuman";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if($conn->connect_error){
+    die("Connection Failed: " . $conn->connect_error);
+}
+
+?>
+
+
 <!doctype html>
 <html lang="en">
 
@@ -35,13 +50,6 @@
         }
         .announcement-content {
             flex: 1;
-        }
-        .limited-text {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-        display: inline-block;
         }
     </style>
 </head>
@@ -185,45 +193,34 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title fw-semibold mb-4">Pengumuman</h5>
-              <a type="button" href="pengumuman/add" class="btn btn-outline-secondary m-1" style="margin-bottom: 200px">Buat Pengumuman</a>
               <div class="card">
                 <div class="card-body p-4">
-                <?php
-                $servername = 'localhost';
-                $username = 'nova';
-                $password = 'Raffifadlika!&55';
-                $db_name = 'pengumuman';
-
-                $conn = new mysqli($servername, $username, $password, $db_name);
-                if ($conn->connect_error) {
-                  die("Connection Error: " . $conn.log);
-                }
-        $sql = "SELECT id, judul, konten, file_path, created_at FROM pengumuman ORDER BY created_at DESC";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                echo "<div class='announcement-item'>";
-                echo "<div class='announcement-content'>";
-                echo "<h2>" . $row["judul"] . "</h2>";
-                $content_words = explode(' ', $row["konten"]);
-                $limited_content = implode(' ', array_slice($content_words, 0, 10));
-                if (count($content_words) > 10) {
-                    $limited_content .= '...';
-                }
-                echo "<p>" . $limited_content . "</p>";
-                echo "</div>"; 
-                echo "<span class='ti ti-eye fs-8' style='margin-right: 15px' onclick='viewAnnouncement(".$row["id"].")'></span>";
-                echo "<span class='ti ti-trash fs-8 text-danger' onclick='deleteAnnouncement(" . $row["id"] . ")'></span>";
-                echo "<hr>";
-                echo "</div>";
-            }
-        } else {
-            echo "Tidak ada pengumuman.";
+                    <?php
+                if(isset($_GET["id"])){
+    $id = $_GET["id"];
+    $sql = "SELECT judul, konten, file_path, created_at FROM pengumuman WHERE id=$id";
+    $result = $conn->query($sql);
+    
+    if($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        echo "<h3>" . $row["judul"] . "</h3>";
+        echo "<p style='margin-bottom: 30px'>Created at " .$row["created_at"]. "</p>";
+        echo "<h5 style='margin-bottom: 20px'>" .$row["konten"]. "</h5>";
+        if (!empty($row["file_path"])) {
+            echo "<p><a class='btn btn-outline-primary' href='" . $row["file_path"] . "' download>Download File</a></p>";
         }
+    } else {
+        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman";
+        exit();
+    }
 
-        $conn->close();
-        ?>
+} else {
+    echo "ID Pengumuman tidak diberikan";
+}
+
+$conn->close();
+
+?>
                 </div>
               </div>
             </div>
@@ -232,27 +229,6 @@
       </div>
     </div>
   </div>
-  <script>
-        function deleteAnnouncement(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')) {
-                fetch('delete_announcement', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'id=' + id
-                })
-                .then(response => response.text())
-                .then(data => {
-                    alert(data);
-                    location.reload();
-                });
-            }
-        }
-        function viewAnnouncement(id) {
-          window.location.href = "view_announcement?id=" + id;
-        }
-    </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>

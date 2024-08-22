@@ -4,46 +4,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="../">
   <title>Novatix</title>
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-  <style>
-        .announcement-list {
-            width: 80%;
-            margin: auto;
-        }
-        .announcement-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-        }
-        .announcement-item h2 {
-            margin: 0;
-        }
-        .announcement-item p {
-            margin: 5px 0;
-        }
-        .delete-button {
-            cursor: pointer;
-            color: red;
-            background: none;
-            border: none;
-            font-size: 16px;
-        }
-        .announcement-content {
-            flex: 1;
-        }
-        .limited-text {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-        display: inline-block;
-        }
-    </style>
 </head>
 
 <body>
@@ -159,7 +124,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="./profile" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="profile" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
                     </a>
@@ -171,7 +136,7 @@
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">Change Password</p>
                     </a>
-                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="./logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -184,46 +149,24 @@
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Pengumuman</h5>
-              <a type="button" href="pengumuman/add" class="btn btn-outline-secondary m-1" style="margin-bottom: 200px">Buat Pengumuman</a>
+              <h5 class="card-title fw-semibold mb-4">Tambahkan Pengumuman</h5>
               <div class="card">
-                <div class="card-body p-4">
-                <?php
-                $servername = 'localhost';
-                $username = 'nova';
-                $password = 'Raffifadlika!&55';
-                $db_name = 'pengumuman';
-
-                $conn = new mysqli($servername, $username, $password, $db_name);
-                if ($conn->connect_error) {
-                  die("Connection Error: " . $conn.log);
-                }
-        $sql = "SELECT id, judul, konten, file_path, created_at FROM pengumuman ORDER BY created_at DESC";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                echo "<div class='announcement-item'>";
-                echo "<div class='announcement-content'>";
-                echo "<h2>" . $row["judul"] . "</h2>";
-                $content_words = explode(' ', $row["konten"]);
-                $limited_content = implode(' ', array_slice($content_words, 0, 10));
-                if (count($content_words) > 10) {
-                    $limited_content .= '...';
-                }
-                echo "<p>" . $limited_content . "</p>";
-                echo "</div>"; 
-                echo "<span class='ti ti-eye fs-8' style='margin-right: 15px' onclick='viewAnnouncement(".$row["id"].")'></span>";
-                echo "<span class='ti ti-trash fs-8 text-danger' onclick='deleteAnnouncement(" . $row["id"] . ")'></span>";
-                echo "<hr>";
-                echo "</div>";
-            }
-        } else {
-            echo "Tidak ada pengumuman.";
-        }
-
-        $conn->close();
-        ?>
+                <div class="card-body">
+                  <form action="save_announcement" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                      <label for="judul" class="form-label">Judul</label>
+                      <input type="text" class="form-control" id="judul" name="judul" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="konten" class="form-label">Konten</label>
+                      <textarea id="konten" class="form-control" name="konten" rows="8" cols="50" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label for="file" class="form-label">Upload File</label>
+                      <input type="file" class="form-control" id="file" name="file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
                 </div>
               </div>
             </div>
@@ -232,27 +175,6 @@
       </div>
     </div>
   </div>
-  <script>
-        function deleteAnnouncement(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')) {
-                fetch('delete_announcement', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'id=' + id
-                })
-                .then(response => response.text())
-                .then(data => {
-                    alert(data);
-                    location.reload();
-                });
-            }
-        }
-        function viewAnnouncement(id) {
-          window.location.href = "view_announcement?id=" + id;
-        }
-    </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>
