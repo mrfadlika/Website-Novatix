@@ -207,8 +207,8 @@
                 echo "<div class='announcement-content'>";
                 echo "<h2>" . $row["judul"] . "</h2>";
                 $content_words = explode(' ', $row["konten"]);
-                $limited_content = implode(' ', array_slice($content_words, 0, 10));
-                if (count($content_words) > 10) {
+                $limited_content = implode(' ', array_slice($content_words, 0, 15));
+                if (count($content_words) > 15) {
                     $limited_content .= '...';
                 }
                 echo "<p>" . $limited_content . "</p>";
@@ -235,7 +235,7 @@
   <script>
         function deleteAnnouncement(id) {
             if (confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')) {
-                fetch('delete_announcement', {
+                fetch('api/delete_announcement', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
