@@ -20,6 +20,7 @@ if ($conn->connect_error) {
   <title>Novatix</title>
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <style>
 .card a {
             text-decoration: none;
@@ -292,7 +293,7 @@ if ($conn->connect_error) {
                     echo "</div>";
                     echo "<p class='mb-0' style='padding-bottom: 20px'>0" . $row["nomor_hp"] . "</p>";
                     echo "</div>";
-                    echo "<button href='https://wa.me/62" . $row["nomor_hp"] . "' class='btn btn-primary'>Hubungi</a>";
+                    echo "<button onclick=\"window.location.href='https://wa.me/62" . $row["nomor_hp"] . "'\" class='btn btn-primary'>Hubungi</button>";
                     echo "</div>";
                     echo "</div>";
                 }
