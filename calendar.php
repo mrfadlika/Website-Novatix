@@ -24,6 +24,8 @@ $user = $result->fetch_assoc();
 
 $stmt->close();
 $conn->close();
+
+include 'api/db_foto.php';
 ?>
 
 <!doctype html>

@@ -1,3 +1,4 @@
+<?php session_start(); include 'api/db_foto.php' ?>
 <!doctype html>
 <html lang="en">
 
@@ -152,7 +153,7 @@
               <h5 class="card-title fw-semibold mb-4">Tambahkan Pengumuman</h5>
               <div class="card">
                 <div class="card-body">
-                  <form action="save_announcement" method="post" enctype="multipart/form-data">
+                  <form action="api/save_announcement" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                       <label for="judul" class="form-label">Judul</label>
                       <input type="text" class="form-control" id="judul" name="judul" required>
