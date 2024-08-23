@@ -1,3 +1,4 @@
+<?php session_start(); include 'api/db_foto.php' ?>
 <!doctype html>
 <html lang="en">
 

@@ -1,15 +1,17 @@
-<?php session_start(); include 'api/db_foto.php' ?>
 <?php
+session_start();
 $servername = "localhost";
 $username = "nova";
 $password = "Raffifadlika!&55";
-$dbname = "pengumuman";
+$dbname = "db_novatix";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-if($conn->connect_error){
-    die("Connection Failed: " . $conn->connect_error);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
+
+include 'api/db_foto.php'
 ?>
 
 <!doctype html>
@@ -23,34 +25,68 @@ if($conn->connect_error){
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <style>
-        .announcement-list {
-            width: 80%;
-            margin: auto;
-        }
-        .announcement-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-        }
-        .announcement-item h2 {
-            margin: 0;
-        }
-        .announcement-item p {
-            margin: 5px 0;
-        }
-        .delete-button {
-            cursor: pointer;
-            color: red;
-            background: none;
-            border: none;
-            font-size: 16px;
-        }
-        .announcement-content {
-            flex: 1;
-        }
-    </style>
+    .profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.profile-header h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.profile-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-info h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.profile-info p {
+    margin: 2px 0;
+    color: #666;
+}
+
+.personal-info, .address-info {
+    margin-bottom: 20px;
+}
+
+.personal-info h2, .address-info h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+p {
+    margin: 5px 0;
+}
+
+  </style>
 </head>
 
 <body>
@@ -99,7 +135,7 @@ if($conn->connect_error){
             <li class="sidebar-item">
               <a class="sidebar-link" href="forms" aria-expanded="false">
                 <span>
-                  <i class="ti ti-file-upload"></i>
+                  <i class="ti ti-file-upload"></i> 
                 </span>
                 <span class="hide-menu">Forms</span>
               </a>
@@ -155,7 +191,7 @@ if($conn->connect_error){
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <a href="https://wa.me/62882020802944" target="_blank" class="btn btn-primary">Hubungi Admin</a>
+              <a href="https:wa.me/62882020802944" target="_blank" class="btn btn-primary">Hubungi Admin</a>
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -178,7 +214,7 @@ if($conn->connect_error){
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">Change Password</p>
                     </a>
-                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="./index.php" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -187,44 +223,79 @@ if($conn->connect_error){
         </nav>
       </header>
       <!--  Header End -->
-      <div class="container-fluid">
-        <div class="container-fluid">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Pengumuman</h5>
-              <div class="card">
-                <div class="card-body p-4">
-                    <?php
-                if(isset($_GET["id"])){
-    $id = $_GET["id"];
-    $sql = "SELECT judul, konten, file_path, created_at FROM pengumuman WHERE id=$id";
-    $result = $conn->query($sql);
-    
-    if($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        echo "<h3>" . $row["judul"] . "</h3>";
-        echo "<p style='margin-bottom: 30px'>Created at " .$row["created_at"]. "</p>";
-        echo "<h5 style='margin-bottom: 20px'>" .$row["konten"]. "</h5>";
-        if (!empty($row["file_path"])) {
-            echo "<p><a class='btn btn-outline-primary' href='" . $row["file_path"] . "' download>Download File</a></p>";
+      <div class="container-fluid"> <div class="profile-header">
+      <h5 class="card-title fw-semibold mb-4">My Profile</h5>
+      <?php
+$nim = $_SESSION['nim'];
+
+// Query untuk mengambil data mahasiswa berdasarkan NIM
+$sql = "SELECT nama, email, nomor_hp, tanggal_lahir, foto_profil FROM users WHERE nim = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $nim);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        echo "<div class='card'><div class='card-body' style='display: flex; align-items: center;'>";
+        
+        // Cek apakah foto profil tersedia
+        if (!empty($row['foto_profil'])) {
+            echo "<img src='uploads/".$row['foto_profil']."' alt='Foto Mahasiswa' width='80' height='80' class='rounded-circle' style='margin-right: 50px'>";
+        } else {
+            echo "<img src='images/profile/user-1.jpg' alt='Foto Mahasiswa' width='80' height='80' class='rounded-circle' style='margin-right: 50px'>";
         }
-    } else {
-        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman";
-        exit();
+        
+        echo "<div class='info' style='flex: 1;'>";
+        echo "<h3 style='margin-right: 200px'>" . $row["nama"] . "</h3>";
+        echo "<p>Mahasiswa</p>";
+        
+        // Jika foto profil belum diunggah, tampilkan form upload
+        if (empty($row['foto_profil'])) {
+            echo "<label class='form-label'>Upload Foto Profil</label>";
+            echo "<form action='api/upload_foto' method='post' enctype='multipart/form-data'>";
+            echo "<div><input type='file' class='form-control' id='foto_profil' name='foto_profil' required></div>";
+            echo "<button type='submit' class='btn btn-primary' style='margin-top: 20px;'>Upload</button>";
+            echo "</form>";
+        }
+        
+        echo "</div></div>";
+        
+        echo "<div class='card-body'><div class='personal-info'>";
+        echo "<h4>Personal Information</h4><div class='info-grid'>";
+        
+        // Split nama menjadi nama depan dan belakang
+        function split_name($full_name) {
+            $name_parts = explode(" ", trim($full_name));
+            $first_name = $name_parts[0];
+            $last_name = isset($name_parts[1]) ? implode(" ", array_slice($name_parts, 1)) : "";
+            return array('first_name' => $first_name, 'last_name' => $last_name);
+        }
+        
+        $name = split_name($row['nama']);
+        echo "<div><label>First Name</label><p>" . $name['first_name'] . "</p></div>";
+        echo "<div><label>Last Name</label><p>" . $name['last_name'] . "</p></div>";
+        echo "<div><label>Email</label><p>" . $row['email'] . "</p></div>";
+        echo "<div><label>Phone</label><p>" . $row['nomor_hp'] . "</p></div>";
+        
+        echo "</div></div>";
+        
+        echo "<div class='address-info'><h4>Discourse</h4>";
+        echo "<div class='info-grid'>";
+        echo "<div><label>Prodi</label><p>Teknik Multimedia dan Jaringan</p></div>";
+        echo "<div><label>Jurusan</label><p>Teknik Informatika dan Komputer</p></div>";
+        echo "<div><label>Kampus</label><p>Politeknik Negeri Ujung Pandang</p></div></div></div>";
+        
+        // Pesan jika foto profil belum diunggah
+        if (empty($row['foto_profil'])) {
+            echo "<div><i class='ti ti-alert-octagon text-danger' style='margin-right: 20px;'></i><h7 class='fw-semibold mb-3'>Anda belum mengupload foto profil</h7></div>";
+        }
     }
-
 } else {
-    echo "ID Pengumuman tidak diberikan";
+    echo "<p>Tidak ada data mahasiswa</p>";
 }
-
-$conn->close();
-
 ?>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>
