@@ -206,7 +206,7 @@ p {
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
                     </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="mail" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-mail fs-6"></i>
                       <p class="mb-0 fs-3">Mail</p>
                     </a>
@@ -265,16 +265,16 @@ if ($result->num_rows > 0) {
         echo "<h4>Personal Information</h4><div class='info-grid'>";
         
         // Split nama menjadi nama depan dan belakang
-        function split_name($full_name) {
-            $name_parts = explode(" ", trim($full_name));
-            $first_name = $name_parts[0];
-            $last_name = isset($name_parts[1]) ? implode(" ", array_slice($name_parts, 1)) : "";
-            return array('first_name' => $first_name, 'last_name' => $last_name);
-        }
+        // function split_name($full_name) {
+        //     $name_parts = explode(" ", trim($full_name));
+        //     $first_name = $name_parts[0];
+        //     $last_name = isset($name_parts[1]) ? implode(" ", array_slice($name_parts, 1)) : "";
+        //     return array('first_name' => $first_name, 'last_name' => $last_name);
+        // }
         
-        $name = split_name($row['nama']);
-        echo "<div><label>First Name</label><p>" . $name['first_name'] . "</p></div>";
-        echo "<div><label>Last Name</label><p>" . $name['last_name'] . "</p></div>";
+        // $name = split_name($row['nama']);
+        echo "<div><label>Name</label><p>" . $row['nama'] . "</p></div>";
+        echo "<div><label>NIM</label><p>" . $_SESSION['nim'] . "</p></div>";
         echo "<div><label>Email</label><p>" . $row['email'] . "</p></div>";
         echo "<div><label>Phone</label><p>" . $row['nomor_hp'] . "</p></div>";
         

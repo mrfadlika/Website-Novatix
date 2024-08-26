@@ -20,6 +20,21 @@ elseif($uri == 'calendar/add_event'){
 elseif($uri == 'pengumuman/add'){
     require 'add_announcement.php';
 }
+elseif($uri == 'pengumuman/view'){
+    require 'view_announcement.php';
+}
+elseif($uri == 'mail'){
+    require 'show_mail.php';
+}
+elseif($uri == 'mail/add'){
+    require 'kirimPesan.php';
+}
+elseif($uri == 'mail/view'){
+    require 'view_mail.php';
+}
+elseif ($uri == 'mail/reply') {
+    require 'reply.php';
+}
 else {
     require '404.php';
 }

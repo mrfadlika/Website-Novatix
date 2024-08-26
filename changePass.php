@@ -1,17 +1,4 @@
 <?php session_start(); include 'api/db_foto.php' ?>
-<?php
-$servername = "localhost";
-$username = "nova";
-$password = "Raffifadlika!&55";
-$dbname = "pengumuman";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if($conn->connect_error){
-    die("Connection Failed: " . $conn->connect_error);
-}
-?>
-
 <!doctype html>
 <html lang="en">
 
@@ -19,39 +6,8 @@ if($conn->connect_error){
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Novatix</title>
-  <base href="../">
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-  <style>
-        .announcement-list {
-            width: 80%;
-            margin: auto;
-        }
-        .announcement-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-        }
-        .announcement-item h2 {
-            margin: 0;
-        }
-        .announcement-item p {
-            margin: 5px 0;
-        }
-        .delete-button {
-            cursor: pointer;
-            color: red;
-            background: none;
-            border: none;
-            font-size: 16px;
-        }
-        .announcement-content {
-            flex: 1;
-        }
-    </style>
 </head>
 
 <body>
@@ -167,7 +123,7 @@ if($conn->connect_error){
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="./profile" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="profile" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
                     </a>
@@ -192,35 +148,24 @@ if($conn->connect_error){
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Pengumuman</h5>
+              <h5 class="card-title fw-semibold mb-4">Ganti Password</h5>
               <div class="card">
-                <div class="card-body p-4">
-                    <?php
-                if(isset($_GET["id"])){
-    $id = $_GET["id"];
-    $sql = "SELECT judul, konten, file_path, created_at FROM pengumuman WHERE id=$id";
-    $result = $conn->query($sql);
-    
-    if($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        echo "<h3>" . $row["judul"] . "</h3>";
-        echo "<p style='margin-bottom: 30px'>Created at " .$row["created_at"]. "</p>";
-        echo "<h5 style='margin-bottom: 20px'>" .$row["konten"]. "</h5>";
-        if (!empty($row["file_path"])) {
-            echo "<p><a class='btn btn-outline-primary' href='" . $row["file_path"] . "' download>Download File</a></p>";
-        }
-    } else {
-        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman";
-        exit();
-    }
-
-} else {
-    echo "ID Pengumuman tidak diberikan";
-}
-
-$conn->close();
-
-?>
+                <div class="card-body">
+                  <form id="changePasswordForm" action="api/ganti_password" method="post">
+                    <div class="mb-3">
+                      <label for="old_password" class="form-label">Password Lama</label>
+                      <input type="password" class="form-control" id="old_password" name="old_password" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="new_password" class="form-label">Password Baru</label>
+                      <input type="password" class="form-control" id="new_password" name="new_password" required disabled>
+                    </div>
+                    <div class="mb-3">
+                      <label for="confirm_password" class="form-label">Ulangi Password Baru</label>
+                      <input type="password" class="form-control" id="confirm_password" name="confirm_password" required disabled>
+                    </div>
+                    <button type="submit" id="submit" disabled class="btn btn-primary">Submit</button>
+                  </form>
                 </div>
               </div>
             </div>
@@ -229,6 +174,29 @@ $conn->close();
       </div>
     </div>
   </div>
+  <script>
+        document.getElementById('old_password').addEventListener('blur', function() {
+        var passwordLama = this.value;
+
+        fetch('api/db_password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'old_password=' + encodeURIComponent(passwordLama)
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data === 'valid') {
+                document.getElementById('new_password').disabled = false;
+                document.getElementById('confirm_password').disabled = false;
+                document.getElementById('submit').disabled = false;
+            } else {
+                alert('Password lama salah.');
+            }
+        });
+    });
+  </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>
