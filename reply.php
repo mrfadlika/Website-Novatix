@@ -1,57 +1,50 @@
-<?php session_start(); include 'api/db_foto.php' ?>
-<?php
+<?php 
+session_start();
+include 'api/db_foto.php';
+
 $servername = "localhost";
 $username = "nova";
 $password = "Raffifadlika!&55";
-$dbname = "pengumuman";
+$namadatabase = "db_novatix";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if($conn->connect_error){
-    die("Connection Failed: " . $conn->connect_error);
+$conn = new mysqli($servername, $username, $password, $namadatabase);
+if ($conn->connect_error) {
+    die("ERR: " . $conn->connect_error);
 }
-?>
 
+// Mendapatkan ID pesan dari query parameter
+$pesan_id = isset($_GET['id']) ? $_GET['id'] : '';
+$tujuan_nim = '';
+$subyek_asal = '';
+
+// Mengambil data pesan untuk balasan
+if ($pesan_id) {
+    $sql = "SELECT send_from, subyek FROM mailing WHERE id = '$pesan_id'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $tujuan_nim = $row['send_from'];
+        $subyek_asal = $row['subyek'];
+    }
+}
+
+// Ambil data pengguna untuk dropdown jika perlu
+$sql_users = "SELECT nim, nama FROM users";
+$result_users = $conn->query($sql_users);
+
+$conn->close();
+?>
 <!doctype html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Novatix</title>
   <base href="../">
+  <title>Novatix</title>
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-  <style>
-        .announcement-list {
-            width: 80%;
-            margin: auto;
-        }
-        .announcement-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-        }
-        .announcement-item h2 {
-            margin: 0;
-        }
-        .announcement-item p {
-            margin: 5px 0;
-        }
-        .delete-button {
-            cursor: pointer;
-            color: red;
-            background: none;
-            border: none;
-            font-size: 16px;
-        }
-        .announcement-content {
-            flex: 1;
-        }
-    </style>
 </head>
 
 <body>
@@ -167,7 +160,7 @@ if($conn->connect_error){
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="./profile" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="profile" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
                     </a>
@@ -179,49 +172,39 @@ if($conn->connect_error){
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">Change Password</p>
                     </a>
-                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="./logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
             </ul>
           </div>
         </nav>
-      </header>
-      <!--  Header End -->
+        </header>
       <div class="container-fluid">
-        <div class="container-fluid">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Pengumuman</h5>
-              <div class="card">
-                <div class="card-body p-4">
-                    <?php
-                if(isset($_GET["id"])){
-    $id = $_GET["id"];
-    $sql = "SELECT judul, konten, file_path, created_at FROM pengumuman WHERE id=$id";
-    $result = $conn->query($sql);
-    
-    if($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        echo "<h3>" . $row["judul"] . "</h3>";
-        echo "<p style='margin-bottom: 30px'>Created at " .$row["created_at"]. "</p>";
-        echo "<h5 style='margin-bottom: 20px'>" .$row["konten"]. "</h5>";
-        if (!empty($row["file_path"])) {
-            echo "<p><a class='btn btn-outline-primary' href='" . $row["file_path"] . "' download>Download File</a></p>";
-        }
-    } else {
-        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman";
-        exit();
-    }
-
-} else {
-    echo "ID Pengumuman tidak diberikan";
-}
-
-$conn->close();
-
-?>
-                </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold mb-4">Balas Pesan</h5>
+            <div class="card">
+              <div class="card-body">
+                <form action="api/sendChat" method="post" enctype="multipart/form-data">
+                  <div class="mb-3">
+                    <label for="send_to" class="form-label">Tujuan</label>
+                    <input type="text" class="form-control" id="send_to" name="send_to" value="<?php echo htmlspecialchars($tujuan_nim); ?>" readonly>
+                  </div>
+                  <div class="mb-3">
+                    <label for="subyek" class="form-label">Subject</label>
+                    <input type="text" class="form-control" id="subyek" name="subyek" value="<?php echo 'Re: ' . htmlspecialchars($subyek_asal); ?>" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="isi_pesan" class="form-label">Isi Pesan</label>
+                    <textarea class="form-control" id="isi_pesan" name="isi_pesan" rows="5" required></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="file" class="form-label">Upload File</label>
+                    <input type="file" class="form-control" id="file" name="file">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Kirim</button>
+                </form>
               </div>
             </div>
           </div>

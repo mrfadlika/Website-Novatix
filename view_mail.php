@@ -1,16 +1,4 @@
 <?php session_start(); include 'api/db_foto.php' ?>
-<?php
-$servername = "localhost";
-$username = "nova";
-$password = "Raffifadlika!&55";
-$dbname = "pengumuman";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if($conn->connect_error){
-    die("Connection Failed: " . $conn->connect_error);
-}
-?>
 
 <!doctype html>
 <html lang="en">
@@ -195,32 +183,52 @@ if($conn->connect_error){
               <h5 class="card-title fw-semibold mb-4">Pengumuman</h5>
               <div class="card">
                 <div class="card-body p-4">
-                    <?php
-                if(isset($_GET["id"])){
+                <?php
+if (isset($_GET["id"])) {
     $id = $_GET["id"];
-    $sql = "SELECT judul, konten, file_path, created_at FROM pengumuman WHERE id=$id";
+
+    // Query untuk mengambil detail pesan dari tabel mailing
+    $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, filepath FROM mailing WHERE id=$id";
     $result = $conn->query($sql);
-    
-    if($result->num_rows > 0) {
+
+    if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        echo "<h3>" . $row["judul"] . "</h3>";
-        echo "<p style='margin-bottom: 30px'>Created at " .$row["created_at"]. "</p>";
-        echo "<h5 style='margin-bottom: 20px'>" .$row["konten"]. "</h5>";
-        if (!empty($row["file_path"])) {
-            echo "<p><a class='btn btn-outline-primary' href='" . $row["file_path"] . "' download>Download File</a></p>";
+
+        // Ambil nim dari kolom send_from
+        $send_from_nim = $row["send_from"];
+
+        // Query untuk mengambil nama berdasarkan nim dari tabel users
+        $sql_nama = "SELECT nama FROM users WHERE nim='$send_from_nim'";
+        $result_query = $conn->query($sql_nama);
+
+        if ($result_query->num_rows > 0) {
+            $user_row = $result_query->fetch_assoc();
+            $sender_name = $user_row["nama"];
+        } else {
+            $sender_name = "Unknown";
         }
+
+        // Tampilkan pesan
+        echo "<h3>" . $row["subyek"] . "</h3>";
+        echo "<p style='margin-bottom: 30px'>From <strong>" . $sender_name . "</strong></p>";
+        echo "<h5 style='margin-bottom: 20px'>" . $row["isi_pesan"] . "</h5>";
+
+        // Jika ada file yang diunggah, tambahkan link untuk mengunduh
+        if (!empty($row["filepath"])) {
+            echo "<p><a class='btn btn-outline-primary' href='" . $row["filepath"] . "' download>Download File</a></p>";
+        }
+        echo "<p><a class='btn btn-primary' href='mail/reply?id=$id'><i class='ti ti-pencil' style='margin-right:10px'></i>Balas Pesan</a></p>";
     } else {
-        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman";
+        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman.";
         exit();
     }
-
 } else {
-    echo "ID Pengumuman tidak diberikan";
+    echo "ID Pengumuman tidak diberikan.";
 }
 
 $conn->close();
-
 ?>
+
                 </div>
               </div>
             </div>
