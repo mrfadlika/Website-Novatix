@@ -238,7 +238,7 @@
   <script>
         function deleteAnnouncement(id) {
             if (confirm('Apakah Anda yakin ingin menghapus pesan ini?')) {
-                fetch('api/delete_announcement', {
+                fetch('api/delete_mail', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
