@@ -40,6 +40,19 @@ include 'api/db_foto.php'
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@1.39.1/iconfont/tabler-icons.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <script>
+        function detectDevice(event) {
+            event.preventDefault();
+            var userAgent = navigator.userAgent.toLowerCase();
+            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+            if (isMobile) {
+                window.location.href = "information_page";
+            } else {
+                window.location.href = "info";
+            }
+        }
+  </script>
 </head>
 
 <body>
@@ -102,7 +115,7 @@ include 'api/db_foto.php'
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="info" aria-expanded="false">
+              <a class="sidebar-link" onclick="detectDevice(event)" aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>

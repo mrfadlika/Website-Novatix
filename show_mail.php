@@ -9,6 +9,19 @@
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <script>
+        function detectDevice(event) {
+            event.preventDefault();
+            var userAgent = navigator.userAgent.toLowerCase();
+            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+            if (isMobile) {
+                window.location.href = "information_page";
+            } else {
+                window.location.href = "info";
+            }
+        }
+  </script>
   <style>
         .announcement-list {
             width: 80%;
@@ -107,7 +120,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="info" aria-expanded="false">
+              <a class="sidebar-link" onclick="detectDevice(event)" aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>
@@ -186,7 +199,8 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title fw-semibold mb-4">Mailing</h5>
-              <a type="button" href="mail/add" class="btn btn-outline-secondary m-1" style="margin-bottom: 200px">Tulis Pesan</a>
+              <a type="button" href="mail/add" class="btn btn-outline-secondary m-1" style="margin-bottom: 200px"><i class='ti ti-pencil' style='margin-right:10px'></i>Tulis Pesan</a>
+              <a type="button" href="mail/sended" class="btn btn-outline-secondary m-1" style="margin-bottom: 200px"><i class="ti ti-send" style="margin-right:10px"></i>Terkirim</a>
               <div class="card">
                 <div class="card-body p-4">
                 <?php

@@ -40,6 +40,19 @@ include 'api/db_foto.php';
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <script>
+        function detectDevice(event) {
+            event.preventDefault();
+            var userAgent = navigator.userAgent.toLowerCase();
+            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+            if (isMobile) {
+                window.location.href = "information_page";
+            } else {
+                window.location.href = "info";
+            }
+        }
+  </script>
   <style>
         #calendar {
             max-width: 900px;
@@ -111,7 +124,7 @@ include 'api/db_foto.php';
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="info" aria-expanded="false">
+              <a class="sidebar-link" onclick="detectDevice(event)" aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>
@@ -184,7 +197,6 @@ include 'api/db_foto.php';
           </div>
         </nav>
       </header>
-      <!--  Header End -->
       <div class="container-fluid">
         <div class="container-fluid">
           <div class="card">

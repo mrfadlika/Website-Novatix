@@ -85,7 +85,6 @@ if ($conn->connect_error) {
         }
     }
 
-    /* CSS untuk memisahkan nama dan posisi */
     .card-body h3 {
         margin-bottom: 5px;
     }
