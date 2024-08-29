@@ -35,6 +35,12 @@ elseif($uri == 'mail/view'){
 elseif ($uri == 'mail/reply') {
     require 'reply.php';
 }
+elseif($uri == 'mail/sended'){
+    require 'sended_mail.php';
+}
+elseif($uri == 'mail/sended/view'){
+    require 'view_sended_mail.php';
+}
 else {
     require '404.php';
 }

@@ -39,7 +39,7 @@ try {
         } else {
             $_SESSION['error'] = "NIM Tidak Valid";
         }
-        header('Location: login');
+        header('Location: ../login');
         exit();
     }
 } catch (PDOException $e) {

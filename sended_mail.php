@@ -1,27 +1,12 @@
-<?php session_start(); include 'api/db_foto.php' ?>
-
-<?php
-$servername = "localhost";
-$username = "nova";
-$password = "Raffifadlika!&55";
-$namadatabase = "db_novatix";
-
-$conn = new mysqli($servername, $username, $password, $namadatabase);
-if($conn->connect_error){
-    die("ERR: " . $conn->connect_error);
-}
-
-$sql = "SELECT nim, nama FROM users";
-$result = $conn->query($sql);
-?>
+<?php session_start(); include 'api/db_foto.php'?>
 <!doctype html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <base href="../">
   <title>Novatix</title>
+  <base href = "../">
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
@@ -38,6 +23,42 @@ $result = $conn->query($sql);
             }
         }
   </script>
+  <style>
+        .announcement-list {
+            width: 80%;
+            margin: auto;
+        }
+        .announcement-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .announcement-item h2 {
+            margin: 0;
+        }
+        .announcement-item p {
+            margin: 5px 0;
+        }
+        .delete-button {
+            cursor: pointer;
+            color: red;
+            background: none;
+            border: none;
+            font-size: 16px;
+        }
+        .announcement-content {
+            flex: 1;
+        }
+        .limited-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        display: inline-block;
+        }
+    </style>
 </head>
 
 <body>
@@ -100,7 +121,7 @@ $result = $conn->query($sql);
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" onclick="detectDevice(event)" aria-expanded="false">
+              <a class="sidebar-link" onclick="detectDevice(event) aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>
@@ -153,7 +174,7 @@ $result = $conn->query($sql);
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="profile" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="./profile" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
                     </a>
@@ -165,7 +186,7 @@ $result = $conn->query($sql);
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">Change Password</p>
                     </a>
-                    <a href="./logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -178,39 +199,46 @@ $result = $conn->query($sql);
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Kirim Pesan</h5>
+              <h5 class="card-title fw-semibold mb-4">Mailing</h5>
+              <a type="button" href="mail" class="btn btn-outline-secondary m-1" style="margin-bottom: 200px">Back</a>
               <div class="card">
-                <div class="card-body">
-                  <form action="api/sendChat" method="post">
-                    <div class="mb-3">
-                      <label for="send_to" class="form-label">Tujuan</label>
-                      <select class="form-control" id="send_to" name="send_to" required>
-                    <option value="" disabled selected>Pilih NIM Tujuan</option>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                            echo "<option value='" . $row['nim'] . "'>" . $row['nim'] . " - " . $row['nama'] . "</option>";
-                        }
-                    } else {
-                        echo "<option value=''>Tidak ada NIM tersedia</option>";
-                    }
-                    ?>
-                    </select>
-                    </div>
-                    <div class="mb-3">
-                      <label for="subyek" class="form-label">Subject</label>
-                      <input type="text" class="form-control" id="subyek" name="subyek" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="isi_pesan" class="form-label">Isi Pesan</label>
-                      <textarea class="form-control" id="isi_pesan" name="isi_pesan" rows="5" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                      <label for="file" class="form-label">Upload File</label>
-                      <input type="file" class="form-control" id="file" name="file">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Kirim</button>
-                  </form>
+                <div class="card-body p-4">
+                <?php
+                $servername = 'localhost';
+                $username = 'nova';
+                $password = 'Raffifadlika!&55';
+                $db_name = 'db_novatix';
+
+                $conn = new mysqli($servername, $username, $password, $db_name);
+                if ($conn->connect_error) {
+                  die("Connection Error: " . $conn.log);
+                }
+        $nim = $_SESSION['nim'];
+        $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, filepath, tanggal_kirim FROM mailing WHERE send_from = $nim ORDER BY tanggal_kirim DESC";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo "<div class='announcement-item'>";
+                echo "<div class='announcement-content'>";
+                echo "<h2>" . $row["subyek"] . "</h2>";
+                $content_words = explode(' ', $row["isi_pesan"]);
+                $limited_content = implode(' ', array_slice($content_words, 0, 15));
+                if (count($content_words) > 15) {
+                    $limited_content .= '...';
+                }
+                echo "<p>" . $limited_content . "</p>";
+                echo "</div>"; 
+                echo "<span class='ti ti-eye fs-8' style='margin-right: 15px' onclick='viewAnnouncement(".$row["id"].")'></span>";
+                echo "<span class='ti ti-trash fs-8 text-danger' onclick='deleteAnnouncement(" . $row["id"] . ")'></span>";
+                echo "<hr>";
+                echo "</div>";
+            }
+        } else {
+            echo "Tidak ada pesan untuk anda.";
+        }
+
+        $conn->close();
+        ?>
                 </div>
               </div>
             </div>
@@ -219,6 +247,27 @@ $result = $conn->query($sql);
       </div>
     </div>
   </div>
+  <script>
+        function deleteAnnouncement(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus pesan ini?')) {
+                fetch('api/delete_mail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'id=' + id
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    location.reload();
+                });
+            }
+        }
+        function viewAnnouncement(id) {
+          window.location.href = "mail/sended/view?id=" + id;
+        }
+    </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>

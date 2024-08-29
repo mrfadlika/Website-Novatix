@@ -76,6 +76,19 @@ include 'api/db_foto.php';
             margin-top: 5px;
         }
     </style>
+      <script>
+        function detectDevice(event) {
+            event.preventDefault();
+            var userAgent = navigator.userAgent.toLowerCase();
+            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+            if (isMobile) {
+                window.location.href = "information_page";
+            } else {
+                window.location.href = "info";
+            }
+        }
+  </script>
 </head>
 
 <body>
@@ -138,7 +151,7 @@ include 'api/db_foto.php';
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="info" aria-expanded="false">
+              <a class="sidebar-link" onclick="detectDevice(event)" aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>

@@ -1,31 +1,46 @@
 <?php session_start(); include 'api/db_foto.php' ?>
 
-<?php
-$servername = "localhost";
-$username = "nova";
-$password = "Raffifadlika!&55";
-$namadatabase = "db_novatix";
-
-$conn = new mysqli($servername, $username, $password, $namadatabase);
-if($conn->connect_error){
-    die("ERR: " . $conn->connect_error);
-}
-
-$sql = "SELECT nim, nama FROM users";
-$result = $conn->query($sql);
-?>
 <!doctype html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <base href="../">
   <title>Novatix</title>
+  <base href="../../">
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-  <script>
+  <style>
+        .announcement-list {
+            width: 80%;
+            margin: auto;
+        }
+        .announcement-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .announcement-item h2 {
+            margin: 0;
+        }
+        .announcement-item p {
+            margin: 5px 0;
+        }
+        .delete-button {
+            cursor: pointer;
+            color: red;
+            background: none;
+            border: none;
+            font-size: 16px;
+        }
+        .announcement-content {
+            flex: 1;
+        }
+    </style>
+      <script>
         function detectDevice(event) {
             event.preventDefault();
             var userAgent = navigator.userAgent.toLowerCase();
@@ -153,7 +168,7 @@ $result = $conn->query($sql);
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="profile" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="./profile" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
                     </a>
@@ -165,7 +180,7 @@ $result = $conn->query($sql);
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">Change Password</p>
                     </a>
-                    <a href="./logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -178,39 +193,54 @@ $result = $conn->query($sql);
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Kirim Pesan</h5>
+              <h5 class="card-title fw-semibold mb-4">Pesan</h5>
               <div class="card">
-                <div class="card-body">
-                  <form action="api/sendChat" method="post">
-                    <div class="mb-3">
-                      <label for="send_to" class="form-label">Tujuan</label>
-                      <select class="form-control" id="send_to" name="send_to" required>
-                    <option value="" disabled selected>Pilih NIM Tujuan</option>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                            echo "<option value='" . $row['nim'] . "'>" . $row['nim'] . " - " . $row['nama'] . "</option>";
-                        }
-                    } else {
-                        echo "<option value=''>Tidak ada NIM tersedia</option>";
-                    }
-                    ?>
-                    </select>
-                    </div>
-                    <div class="mb-3">
-                      <label for="subyek" class="form-label">Subject</label>
-                      <input type="text" class="form-control" id="subyek" name="subyek" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="isi_pesan" class="form-label">Isi Pesan</label>
-                      <textarea class="form-control" id="isi_pesan" name="isi_pesan" rows="5" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                      <label for="file" class="form-label">Upload File</label>
-                      <input type="file" class="form-control" id="file" name="file">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Kirim</button>
-                  </form>
+                <div class="card-body p-4">
+                <?php
+if (isset($_GET["id"])) {
+    $id = $_GET["id"];
+
+    // Query untuk mengambil detail pesan dari tabel mailing
+    $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, filepath FROM mailing WHERE id=$id";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        // Ambil nim dari kolom send_from
+        $send_from_nim = $row["send_to"];
+
+        // Query untuk mengambil nama berdasarkan nim dari tabel users
+        $sql_nama = "SELECT nama FROM users WHERE nim='$send_from_nim'";
+        $result_query = $conn->query($sql_nama);
+
+        if ($result_query->num_rows > 0) {
+            $user_row = $result_query->fetch_assoc();
+            $sender_name = $user_row["nama"];
+        } else {
+            $sender_name = "Unknown";
+        }
+
+        // Tampilkan pesan
+        echo "<h3>" . $row["subyek"] . "</h3>";
+        echo "<p style='margin-bottom: 30px'>to <strong>" . $sender_name . "</strong></p>";
+        echo "<h5 style='margin-bottom: 20px'>" . $row["isi_pesan"] . "</h5>";
+
+        // Jika ada file yang diunggah, tambahkan link untuk mengunduh
+        if (!empty($row["filepath"])) {
+            echo "<p><a class='btn btn-outline-primary' href='" . $row["filepath"] . "' download>Download File</a></p>";
+        }
+    } else {
+        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman.";
+        exit();
+    }
+} else {
+    echo "ID Pengumuman tidak diberikan.";
+}
+
+$conn->close();
+?>
+
                 </div>
               </div>
             </div>
