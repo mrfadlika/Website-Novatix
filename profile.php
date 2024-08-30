@@ -282,9 +282,9 @@ if ($result->num_rows > 0) {
         
         echo "<div class='address-info'><h4>Discourse</h4>";
         echo "<div class='info-grid'>";
-        echo "<div><label>Prodi</label><p>Teknik Multimedia dan Jaringan</p></div>";
+        echo "<div><label>Kampus</label><p>Politeknik Negeri Ujung Pandang</p></div>";
         echo "<div><label>Jurusan</label><p>Teknik Informatika dan Komputer</p></div>";
-        echo "<div><label>Kampus</label><p>Politeknik Negeri Ujung Pandang</p></div></div></div>";
+        echo "<div><label>Prodi</label><p>Teknik Multimedia dan Jaringan</p></div></div></div>";
         
         // Pesan jika foto profil belum diunggah
         if (empty($row['foto_profil'])) {
