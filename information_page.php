@@ -94,6 +94,19 @@ if ($conn->connect_error) {
         margin-bottom: 10px;
     }
   </style>
+  <script>
+        function isDesktop() {
+            return window.innerWidth > 768;
+        }
+
+        function redirectToInfoPage() {
+            if (isDesktop()) {
+                const queryString = window.location.search; 
+                window.location.href = "info" + queryString;
+            }
+        }
+        window.onload = redirectToInfoPage;
+  </script>
 </head>
 
 <body>

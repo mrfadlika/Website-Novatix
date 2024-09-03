@@ -1,4 +1,4 @@
-<?php session_start(); include 'api/db_foto.php' ?>
+<?php include 'api/check_sesi.php'; include 'api/db_foto.php'; ?>
 
 <!doctype html>
 <html lang="en">

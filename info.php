@@ -1,16 +1,6 @@
 <?php
 session_start();
-$servername = "localhost";
-$username = "nova"; 
-$password = "Raffifadlika!&55"; 
-$dbname = "db_novatix";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-include 'api/db_foto.php'
+include 'api/db_foto.php';
 ?>
 
 <!doctype html>
@@ -101,6 +91,20 @@ include 'api/db_foto.php'
 }
 
     </style>
+    <script>
+        function getQueryString() {
+            return window.location.search;
+        }
+
+        function redirectToMobilePage() {
+            if (window.innerWidth <= 768) { 
+                const queryString = getQueryString();
+                window.location.href = "information_page" + queryString;
+            }
+        }
+
+        window.onload = redirectToMobilePage;
+    </script>
 </head>
 
 <body>

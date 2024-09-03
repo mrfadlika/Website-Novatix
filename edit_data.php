@@ -1,28 +1,78 @@
-<?php include 'api/check_sesi.php'; include 'api/db_foto.php'; ?>
+<?php include 'api/db_edit_data.php' ?>
 <!doctype html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <base href="../">
   <title>Novatix</title>
+  <base href='../'>
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-  <script>
-        function detectDevice(event) {
-            event.preventDefault();
-            var userAgent = navigator.userAgent.toLowerCase();
-            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+  <style>
+    .profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
-            if (isMobile) {
-                window.location.href = "information_page";
-            } else {
-                window.location.href = "info";
-            }
-        }
-  </script>
+.profile-header h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.profile-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-info h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.profile-info p {
+    margin: 2px 0;
+    color: #666;
+}
+
+.personal-info, .address-info {
+    margin-bottom: 20px;
+}
+
+.personal-info h2, .address-info h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+p {
+    margin: 5px 0;
+}
+
+  </style>
 </head>
 
 <body>
@@ -71,7 +121,7 @@
             <li class="sidebar-item">
               <a class="sidebar-link" href="forms" aria-expanded="false">
                 <span>
-                  <i class="ti ti-file-upload"></i>
+                  <i class="ti ti-file-upload"></i> 
                 </span>
                 <span class="hide-menu">Forms</span>
               </a>
@@ -85,7 +135,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" onclick="detectDevice(event)" aria-expanded="false">
+              <a class="sidebar-link" href="info" aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>
@@ -127,7 +177,7 @@
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <a href="https://wa.me/62882020802944" target="_blank" class="btn btn-primary">Hubungi Admin</a>
+              <a href="https:wa.me/62882020802944" target="_blank" class="btn btn-primary">Hubungi Admin</a>
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -138,7 +188,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="profile" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="./profile" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
                     </a>
@@ -160,51 +210,72 @@
       </header>
       <!--  Header End -->
       <div class="container-fluid">
-        <div class="container-fluid">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Tambahkan Event</h5>
-              <div class="card">
-                <div class="card-body">
-                  <form id="eventForm">
-                    <div class="mb-3">
-                      <label for="title" class="form-label">Nama Event</label>
-                      <input type="text" class="form-control" name="title" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="start" class="form-label">Tanggal Mulai</label>
-                      <input type="date" class="form-control" name="start" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                      <label for="start" class="form-label">Tanggal Selesai</label>
-                      <input type="date" class="form-control" name="end">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                  </form>
-                </div>
+        <div class="profile-header">
+          <h5 class="card-title fw-semibold mb-4">My Profile</h5>
+          <div class='card'>
+            <div class='card-body' style='display: flex; align-items: center;'>
+              <?php
+              if (!empty($row['foto_profil'])) {
+                echo "<img src='uploads/".$row['foto_profil']."' alt='Foto Mahasiswa' width='80' height='80' class='rounded-circle' style='margin-right: 50px'>";
+              } else {
+                echo "<img src='images/profile/user-1.jpg' alt='Foto Mahasiswa' width='80' height='80' class='rounded-circle' style='margin-right: 50px'>";
+              }
+              ?>
+              <div class='info' style='flex: 1;'>
+                <h3 style='margin-right: 200px'><?php echo !empty($row['nama']) ? $row["nama"] : '-'; ?></h3>
+                <p>Mahasiswa</p>
               </div>
+            </div>
+            <div class='card-body'>
+              <form method="post" action="edit_data" enctype="multipart/form-data">
+                <div class='personal-info'>
+                  <h4>Personal Information</h4>
+                  <div class='info-grid'>
+                    <div>
+                      <label>Name</label>
+                      <input type="text" name="nama" value="<?php echo $row['nama']; ?>" class="form-control">
+                    </div>
+                    <div>
+                      <label>NIM</label>
+                      <p><?php echo $_SESSION['nim']; ?></p>
+                    </div>
+                    <div>
+                      <label>Email</label>
+                      <input type="email" name="email" value="<?php echo $row['email']; ?>" class="form-control">
+                    </div>
+                    <div>
+                      <label>Phone</label>
+                      <input type="text" name="nomor_hp" value="<?php echo $row['nomor_hp']; ?>" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class='address-info'>
+                  <h4>Discourse</h4>
+                  <div class='info-grid'>
+                    <div>
+                      <label>Kampus</label>
+                      <p>Politeknik Negeri Ujung Pandang</p>
+                    </div>
+                    <div>
+                      <label>Jurusan</label>
+                      <p>Teknik Informatika dan Komputer</p>
+                    </div>
+                    <div>
+                      <label>Prodi</label>
+                      <p>Teknik Multimedia dan Jaringan</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label for="foto_profil">Upload New Profile Picture:</label>
+                  <input type="file" name="foto_profil" id="foto_profil" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Submit</button>
+              </form>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <script>
-        document.getElementById('eventForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-
-            fetch('./api/db_calendar', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                alert(data);
-                window.location.href = 'calendar';
-            });
-        });
-    </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>

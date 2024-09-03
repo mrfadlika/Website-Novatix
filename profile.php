@@ -1,5 +1,4 @@
 <?php
-session_start();
 $servername = "localhost";
 $username = "nova";
 $password = "Raffifadlika!&55";
@@ -10,8 +9,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-include 'api/db_foto.php'
+include 'api/check_sesi.php';
+include 'api/db_foto.php';
 ?>
 
 <!doctype html>
@@ -247,17 +246,21 @@ if ($result->num_rows > 0) {
         }
         
         echo "<div class='info' style='flex: 1;'>";
-        echo "<h3 style='margin-right: 200px'>" . $row["nama"] . "</h3>";
+        if (!empty($row['nama'])){
+          echo "<h3 style='margin-right: 200px'>" . $row["nama"] . "</h3>";
+        } else {
+          echo "<h3 style='margin-right: 200px'>-</h3>";
+        }
         echo "<p>Mahasiswa</p>";
         
         // Jika foto profil belum diunggah, tampilkan form upload
-        if (empty($row['foto_profil'])) {
-            echo "<label class='form-label'>Upload Foto Profil</label>";
-            echo "<form action='api/upload_foto' method='post' enctype='multipart/form-data'>";
-            echo "<div><input type='file' class='form-control' id='foto_profil' name='foto_profil' required></div>";
-            echo "<button type='submit' class='btn btn-primary' style='margin-top: 20px;'>Upload</button>";
-            echo "</form>";
-        }
+        // if (empty($row['foto_profil'])) {
+        //     echo "<label class='form-label'>Upload Foto Profil</label>";
+        //     echo "<form action='api/upload_foto' method='post' enctype='multipart/form-data'>";
+        //     echo "<div><input type='file' class='form-control' id='foto_profil' name='foto_profil' required></div>";
+        //     echo "<button type='submit' class='btn btn-primary' style='margin-top: 20px;'>Upload</button>";
+        //     echo "</form>";
+        // }
         
         echo "</div></div>";
         
@@ -273,11 +276,26 @@ if ($result->num_rows > 0) {
         // }
         
         // $name = split_name($row['nama']);
-        echo "<div><label>Name</label><p>" . $row['nama'] . "</p></div>";
+        if(!empty($row['nama'])) {
+          echo "<div><label>Name</label><p>" . $row['nama'] . "</p></div>";
+        } else {
+          echo "<div><label>Name</label><p>-</p></div>";
+        }
+
         echo "<div><label>NIM</label><p>" . $_SESSION['nim'] . "</p></div>";
-        echo "<div><label>Email</label><p>" . $row['email'] . "</p></div>";
-        echo "<div><label>Phone</label><p>" . $row['nomor_hp'] . "</p></div>";
-        
+
+        if(!empty($row['email'])){
+          echo "<div><label>Email</label><p>" . $row['email'] . "</p></div>";  
+        } else {
+          echo "<div><label>Email</label><p>-</p></div>";
+        }
+
+        if(!empty($row['nomor_hp'])){
+          echo "<div><label>Phone</label><p>" . $row['nomor_hp'] . "</p></div>";
+        } else {
+          echo "<div><label>Phone</label><p>-</p></div>";
+        }
+
         echo "</div></div>";
         
         echo "<div class='address-info'><h4>Discourse</h4>";
@@ -285,11 +303,14 @@ if ($result->num_rows > 0) {
         echo "<div><label>Kampus</label><p>Politeknik Negeri Ujung Pandang</p></div>";
         echo "<div><label>Jurusan</label><p>Teknik Informatika dan Komputer</p></div>";
         echo "<div><label>Prodi</label><p>Teknik Multimedia dan Jaringan</p></div></div></div>";
-        
-        // Pesan jika foto profil belum diunggah
-        if (empty($row['foto_profil'])) {
-            echo "<div><i class='ti ti-alert-octagon text-danger' style='margin-right: 20px;'></i><h7 class='fw-semibold mb-3'>Anda belum mengupload foto profil</h7></div>";
+
+
+        if (empty($row['nama']) || empty($row['email']) || empty($row['nomor_hp']) || empty($row['foto_profil'])) {
+          echo "<div><i class='ti ti-alert-octagon text-danger' style='margin-right: 20px;'></i><h7 class='fw-semibold mb-3'>Anda belum melengkapi data anda</h7></div>";
         }
+
+        echo "<a href='profile/edit' class='btn btn-primary' style='margin-top: 20px'>Edit Profile</a>";
+        
     }
 } else {
     echo "<p>Tidak ada data mahasiswa</p>";

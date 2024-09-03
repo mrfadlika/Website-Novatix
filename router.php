@@ -41,6 +41,9 @@ elseif($uri == 'mail/sended'){
 elseif($uri == 'mail/sended/view'){
     require 'view_sended_mail.php';
 }
+elseif($uri == 'profile/edit'){
+    require 'edit_data.php';
+}
 else {
     require '404.php';
 }

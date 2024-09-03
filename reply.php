@@ -1,7 +1,4 @@
-<?php 
-session_start();
-include 'api/db_foto.php';
-
+<?php
 $servername = "localhost";
 $username = "nova";
 $password = "Raffifadlika!&55";
@@ -33,6 +30,9 @@ $sql_users = "SELECT nim, nama FROM users";
 $result_users = $conn->query($sql_users);
 
 $conn->close();
+
+include 'api/check_sesi.php';
+include 'api/db_foto.php';
 ?>
 <!doctype html>
 <html lang="en">
@@ -166,7 +166,8 @@ $conn->close();
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <?php if(empty($row['foto_profil'])) {
+                  <?php 
+                  if(empty($row['foto_profil'])) {
                       echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
                   } else {
                       echo "<img src='uploads/".$row['foto_profil']."' alt='' width='35' height='35' class='rounded-circle'>"; } ?>
