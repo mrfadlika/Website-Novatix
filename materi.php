@@ -6,7 +6,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Novatix</title>
-  <base href = "../">
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
@@ -121,7 +120,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" onclick="detectDevice(event) aria-expanded="false">
+              <a class="sidebar-link" onclick="detectDevice(event)" aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>
@@ -211,8 +210,7 @@
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Mailing</h5>
-              <a type="button" href="mail" class="btn btn-outline-secondary m-1" style="margin-bottom: 200px">Back</a>
+              <h5 class="card-title fw-semibold mb-4">Materi</h5>
               <div class="card">
                 <div class="card-body p-4">
                 <?php
@@ -225,28 +223,28 @@
                 if ($conn->connect_error) {
                   die("Connection Error: " . $conn.log);
                 }
-        $nim = $_SESSION['nim'];
-        $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, filepath, tanggal_kirim FROM mailing WHERE send_from = $nim ORDER BY tanggal_kirim DESC";
+        $sql = "SELECT id, judul, matkul, deskripsi, file_path, created_at FROM materi ORDER BY created_at DESC";
         $result = $conn->query($sql);
+
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 echo "<div class='announcement-item'>";
                 echo "<div class='announcement-content'>";
-                echo "<h2>" . $row["subyek"] . "</h2>";
-                $content_words = explode(' ', $row["isi_pesan"]);
+                echo "<h2>" . $row["judul"] . "</h2>";
+                $content_words = explode(' ', $row["matkul"]);
                 $limited_content = implode(' ', array_slice($content_words, 0, 15));
                 if (count($content_words) > 15) {
                     $limited_content .= '...';
                 }
-                echo "<p>" . $limited_content . "</p>";
+                echo "<p>Mata Kuliah: " . $limited_content . "</p>";
                 echo "</div>"; 
-                echo "<span class='ti ti-eye fs-8' style='margin-right: 15px' onclick='viewAnnouncement(".$row["id"].")'></span>";
-                echo "<span class='ti ti-trash fs-8 text-danger' onclick='deleteAnnouncement(" . $row["id"] . ")'></span>";
-                echo "<hr>";
+                echo "<span class='ti ti-eye fs-8' style='margin-right: 15px' onclick='showMateri(".$row["id"].")'></span>";
+                //echo "<span class='ti ti-trash fs-8 text-danger' onclick='deleteAnnouncement(" . $row["id"] . ")'></span>";
+                //echo "<hr>";
                 echo "</div>";
             }
         } else {
-            echo "Tidak ada pesan untuk anda.";
+            echo "Tidak ada pengumuman.";
         }
 
         $conn->close();
@@ -260,24 +258,24 @@
     </div>
   </div>
   <script>
-        function deleteAnnouncement(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus pesan ini?')) {
-                fetch('api/delete_mail', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'id=' + id
-                })
-                .then(response => response.text())
-                .then(data => {
-                    alert(data);
-                    location.reload();
-                });
-            }
-        }
-        function viewAnnouncement(id) {
-          window.location.href = "mail/sended/view?id=" + id;
+        // function deleteMateri(id) {
+        //     if (confirm('Apakah Anda yakin ingin menghapus materi ini?')) {
+        //         fetch('api/delete_materi', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/x-www-form-urlencoded',
+        //             },
+        //             body: 'id=' + id
+        //         })
+        //         .then(response => response.text())
+        //         .then(data => {
+        //             alert(data);
+        //             location.reload();
+        //         });
+        //     }
+        // }
+        function showMateri(id) {
+          window.location.href = "materi/view?id=" + id;
         }
     </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
