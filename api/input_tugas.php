@@ -5,17 +5,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $deadline = $_POST['deadline'];
     $deskripsi = $_POST['deskripsi'];
 
-    $conn = new mysqli("localhost", "root", "", "input_tugas");
+    $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
     if ($conn->connect_error) {
         die("Koneksi gagal: " . $conn->connect_error);
     }
 
-    $sql = "SELECT mata_kuliah, penanggung_jawab FROM diketahui WHERE id='$mata_kuliah_id'";
+    $sql = "SELECT activity, penanggungjawab FROM schedules WHERE id='$mata_kuliah_id'";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $mata_kuliah = $row['mata_kuliah'];
-        $dosen_pengampu = $row['penanggung_jawab']; 
+        $mata_kuliah = $row['activity'];
+        $dosen_pengampu = $row['penanggungjawab']; 
     } else {
         echo "Mata kuliah tidak ditemukan.";
         $conn->close();

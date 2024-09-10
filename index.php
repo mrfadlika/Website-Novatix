@@ -9,7 +9,7 @@ if (!isset($_SESSION['nim'])) {
 
 $nim = $_SESSION['nim'];
 
-$conn = new mysqli('localhost', 'root', '', 'db_novatix');
+$conn = new mysqli('localhost', 'nova', 'Raffifadlika!&55', 'realdatabasenovatix');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -279,7 +279,7 @@ include 'api/db_foto.php'
                     </thead>
                     <tbody>
                       <?php
-            $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "input_tugas");
+            $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
             if ($conn->connect_error) {
                 die("Koneksi gagal: " . $conn->connect_error);
             }

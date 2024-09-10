@@ -9,7 +9,7 @@ if (!isset($_SESSION['nim'])) {
 
 $nim = $_SESSION['nim'];
 
-$conn = new mysqli('localhost', 'root', '', 'db_novatix');
+$conn = new mysqli('localhost', 'nova', 'Raffifadlika!&55', 'realdatabasenovatix');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

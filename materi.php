@@ -217,11 +217,11 @@
                 $servername = 'localhost';
                 $username = 'nova';
                 $password = 'Raffifadlika!&55';
-                $db_name = 'db_novatix';
+                $db_name = 'realdatabasenovatix';
 
                 $conn = new mysqli($servername, $username, $password, $db_name);
                 if ($conn->connect_error) {
-                  die("Connection Error: " . $conn.log);
+                  die("Connection Error: " . $conn->connect_error);
                 }
         $sql = "SELECT id, judul, matkul, deskripsi, file_path, created_at FROM materi ORDER BY created_at DESC";
         $result = $conn->query($sql);
@@ -244,7 +244,7 @@
                 echo "</div>";
             }
         } else {
-            echo "Tidak ada pengumuman.";
+            echo "Tidak ada Materi.";
         }
 
         $conn->close();

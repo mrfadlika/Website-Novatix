@@ -121,7 +121,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" onclick="detectDevice(event) aria-expanded="false">
+              <a class="sidebar-link" onclick="detectDevice(event)" aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>
@@ -219,11 +219,11 @@
                 $servername = 'localhost';
                 $username = 'nova';
                 $password = 'Raffifadlika!&55';
-                $db_name = 'db_novatix';
+                $db_name = 'realdatabasenovatix';
 
                 $conn = new mysqli($servername, $username, $password, $db_name);
                 if ($conn->connect_error) {
-                  die("Connection Error: " . $conn.log);
+                  die("Connection Error: " . $conn->connect_error);
                 }
         $nim = $_SESSION['nim'];
         $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, filepath, tanggal_kirim FROM mailing WHERE send_from = $nim ORDER BY tanggal_kirim DESC";

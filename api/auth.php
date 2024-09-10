@@ -1,14 +1,12 @@
 <?php
 session_start();
 
-// Informasi koneksi database
 $host = 'localhost';
-$dbname = 'db_novatix';
-$username = 'nova'; // ganti dengan username MySQL Anda
-$password = 'Raffifadlika!&55'; // ganti dengan password MySQL Anda
+$dbname = 'realdatabasenovatix';
+$username = 'nova';
+$password = 'Raffifadlika!&55'; 
 
 try {
-    // Buat koneksi PDO
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -16,12 +14,10 @@ try {
         $nim = $_POST['nim'];
         $input_password = $_POST['password'];
 
-        // Siapkan dan jalankan query
         $stmt = $pdo->prepare("SELECT password FROM users WHERE nim = :nim");
         $stmt->bindParam(':nim', $nim);
         $stmt->execute();
 
-        // Ambil hasil
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $stored_password = $row['password'];

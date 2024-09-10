@@ -7,7 +7,7 @@ if(!isset($_SESSION['user_id'])){
 
 $user_id = $_SESSION['user_id'];
 
-$conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "db_novatix");
+$conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
 
 if($conn->connect_error){
   die("Connection Failed: " . $conn->connect_error);
@@ -70,17 +70,17 @@ $stmt->close();
                         <option selected disabled>Pilih Mata Kuliah</option>
                         <?php
             // Koneksi ke database
-            $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "input_tugas");
+            $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
             if ($conn->connect_error) {
                 die("Koneksi gagal: " . $conn->connect_error);
             }
 
-            $sql = "SELECT id, mata_kuliah FROM diketahui";
+            $sql = "SELECT id, activity FROM schedules";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    echo "<option value='" . $row['id'] . "'>" . $row['mata_kuliah'] . "</option>";
+                    echo "<option value='" . $row['id'] . "'>" . $row['activity'] . "</option>";
                 }
             } else {
                 echo "<option value=''>Tidak ada data</option>";

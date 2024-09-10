@@ -5,13 +5,13 @@ $matkul_id = $_POST['mata_kuliah'];
 $konten = $_POST['deskripsi'];
 $file_path = '';
 
-$conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "input_tugas");
+$conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
 
 if($conn->connect_error){
     die("Connection Failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT mata_kuliah, penanggung_jawab FROM diketahui WHERE id='$matkul_id'"; 
+$sql = "SELECT activity, penanggungjawab FROM schedules WHERE id='$matkul_id'"; 
 $result = $conn->query($sql);
 if($result->num_rows > 0){
     $row = $result->fetch_assoc();
@@ -25,7 +25,7 @@ if($result->num_rows > 0){
 $servername = 'localhost';
 $username = 'nova';
 $password = 'Raffifadlika!&55';
-$dbname = 'db_novatix';
+$dbname = 'realdatabasenovatix';
 
 $connect = new mysqli($servername, $username, $password, $dbname);
 

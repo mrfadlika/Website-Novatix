@@ -1,4 +1,3 @@
-<!-- disini tanda bahwa sayaa commit-->
 <?php
 session_start();
 
@@ -10,7 +9,7 @@ if (!isset($_SESSION['nim'])) {
 
 $nim = $_SESSION['nim'];
 
-$conn = new mysqli('localhost', 'root', '', 'db_novatix');
+$conn = new mysqli('localhost', 'nova', 'Raffifadlika!&55', 'realdatabasenovatix');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -218,17 +217,17 @@ include 'api/db_foto.php'
                         <option selected disabled>Pilih Mata Kuliah</option>
                         <?php
             // Koneksi ke database
-            $conn = new mysqli("localhost", "root", "", "input_tugas");
+            $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
             if ($conn->connect_error) {
                 die("Koneksi gagal: " . $conn->connect_error);
             }
 
-            $sql = "SELECT id, mata_kuliah FROM diketahui";
+            $sql = "SELECT id, activity FROM schedules";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    echo "<option value='" . $row['id'] . "'>" . $row['mata_kuliah'] . "</option>";
+                    echo "<option value='" . $row['id'] . "'>" . $row['activity'] . "</option>";
                 }
             } else {
                 echo "<option value=''>Tidak ada data</option>";

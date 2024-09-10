@@ -218,11 +218,11 @@
                 $servername = 'localhost';
                 $username = 'nova';
                 $password = 'Raffifadlika!&55';
-                $db_name = 'pengumuman';
+                $db_name = 'realdatabasenovatix';
 
                 $conn = new mysqli($servername, $username, $password, $db_name);
                 if ($conn->connect_error) {
-                  die("Connection Error: " . $conn.log);
+                  die("Connection Error: " . $conn->connect_error);
                 }
         $sql = "SELECT id, judul, konten, file_path, created_at FROM pengumuman ORDER BY created_at DESC";
         $result = $conn->query($sql);

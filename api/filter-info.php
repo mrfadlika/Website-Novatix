@@ -4,9 +4,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $role = $_POST['role'];
 
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "db_novatix";
+    $username = "nova";
+    $password = "Raffifadlika!&55";
+    $dbname = "realdatabasenovatix";
 
     $conn = new mysqli($servername, $username, $password, $dbname);
 

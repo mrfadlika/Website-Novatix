@@ -274,9 +274,9 @@ include 'api/db_foto.php';
 </div>        
             <?php
             $servername = "localhost";
-            $username = "root"; 
-            $password = "";     
-            $dbname = "db_novatix";  
+            $username = "nova"; 
+            $password = "Raffifadlika!&55";     
+            $dbname = "realdatabasenovatix";  
             
             $conn = new mysqli($servername, $username, $password, $dbname);
             

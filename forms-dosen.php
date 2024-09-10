@@ -49,7 +49,7 @@ include 'api/db_foto.php'
                         <option selected disabled>Pilih Mata Kuliah</option>
                         <?php
             // Koneksi ke database
-            $conn = new mysqli("localhost", "root", "", "input_tugas");
+            $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
             if ($conn->connect_error) {
                 die("Koneksi gagal: " . $conn->connect_error);
             }

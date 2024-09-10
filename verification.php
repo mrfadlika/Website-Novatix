@@ -2,7 +2,7 @@
 $servername = 'localhost';
 $username = 'nova';
 $password = 'Raffifadlika!&55';
-$dbname = 'db_novatix';
+$dbname = 'realdatabasenovatix';
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

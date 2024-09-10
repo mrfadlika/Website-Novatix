@@ -2,7 +2,7 @@
 session_start();
 
 // Koneksi ke database
-$conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "db_novatix");
+$conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }

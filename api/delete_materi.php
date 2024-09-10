@@ -2,7 +2,7 @@
 if(isset($_POST['id'])){
     $id = $_POST['id'];
 
-    $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "db_novatix");
+    $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
 
     if($conn->connect_error){
         die("Connection Failed: " . $conn->connect_error);

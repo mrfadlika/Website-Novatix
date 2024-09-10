@@ -7,7 +7,7 @@ if(!isset($_SESSION['user_id'])){
 $servername = "localhost";
 $username = "nova"; 
 $password = "Raffifadlika!&55"; 
-$dbname = "db_novatix";
+$dbname = "realdatabasenovatix";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -111,7 +111,7 @@ if($result->num_rows > 0){
                 </thead>
                 <tbody>
                   <?php
-                  $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "db_novatix");
+                  $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
 
                   if($conn->connect_error){
                     die("Connection Failed:" . $conn->connect_error);
