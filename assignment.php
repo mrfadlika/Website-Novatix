@@ -319,7 +319,9 @@ include 'api/db_foto.php';
               </div>
             </div>
           </div>
-          <button class="btn btn-outline-secondary m-1" onclick="generatePDF()">Generate PDF</button>
+          <form action="api/generate_pdf" method="get">
+            <button class="btn btn-outline-secondary m-1" type="submit">Download PDF</button>
+          </form>
         </div>
       </div>
     </div>
@@ -386,7 +388,7 @@ include 'api/db_foto.php';
   </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
-    <script>
+    <!-- <script>
         function generatePDF() {
             html2canvas(document.getElementById('receipt-content')).then(function(canvas) {
                 var imgData = canvas.toDataURL('image/png');
@@ -410,7 +412,7 @@ include 'api/db_foto.php';
                 doc.save('pdf_tugas.pdf');
             });
         }
-    </script>
+    </script> -->
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>
