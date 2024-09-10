@@ -1,16 +1,6 @@
 <?php
 session_start();
-$servername = "localhost";
-$username = "nova"; 
-$password = "Raffifadlika!&55"; 
-$dbname = "db_novatix";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-include 'api/db_foto.php'
+include 'api/db_foto.php';
 ?>
 
 <!doctype html>
@@ -101,6 +91,20 @@ include 'api/db_foto.php'
 }
 
     </style>
+    <script>
+        function getQueryString() {
+            return window.location.search;
+        }
+
+        function redirectToMobilePage() {
+            if (window.innerWidth <= 768) { 
+                const queryString = getQueryString();
+                window.location.href = "information_page" + queryString;
+            }
+        }
+
+        window.onload = redirectToMobilePage;
+    </script>
 </head>
 
 <body>
@@ -174,6 +178,18 @@ include 'api/db_foto.php'
                   <i class="ti ti-bell-ringing"></i>
                 </span>
                 <span class="hide-menu">Announcement</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">Lessons</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="materi" aria-expanded="false">
+                <span>
+                <i class="ti ti-books"></i>
+                </span>
+                <span class="hide-menu">Learning</span>
               </a>
             </li>
           </ul>
@@ -258,9 +274,9 @@ include 'api/db_foto.php'
 </div>        
             <?php
             $servername = "localhost";
-            $username = "root"; 
-            $password = "";     
-            $dbname = "db_novatix";  
+            $username = "nova"; 
+            $password = "Raffifadlika!&55";     
+            $dbname = "realdatabasenovatix";  
             
             $conn = new mysqli($servername, $username, $password, $dbname);
             

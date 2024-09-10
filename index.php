@@ -9,7 +9,7 @@ if (!isset($_SESSION['nim'])) {
 
 $nim = $_SESSION['nim'];
 
-$conn = new mysqli('localhost', 'root', '', 'db_novatix');
+$conn = new mysqli('localhost', 'nova', 'Raffifadlika!&55', 'realdatabasenovatix');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -130,6 +130,18 @@ include 'api/db_foto.php'
                 <span class="hide-menu">Announcement</span>
               </a>
             </li>
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">Lessons</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="materi" aria-expanded="false">
+                <span>
+                <i class="ti ti-books"></i>
+                </span>
+                <span class="hide-menu">Learning</span>
+              </a>
+            </li>
           </ul>
         </nav>
         <!-- End Sidebar navigation -->
@@ -199,10 +211,12 @@ include 'api/db_foto.php'
                 <div class="row align-items-center">
                     <div class="col-8">
                         <h4 class="fw-semibold mb-3" id='total-tugas'></h4>
-                        <i class="ti ti-check text-success"></i>
+                        <div>
+                        <i class="ti ti-check text-success" style="margin-bottom: 10px"></i>
                         <h7 class="fw-semibold mb-3" id='jumlah_tugas_selesai'></h7><br/>
                         <i class="ti ti-alert-octagon text-danger"></i>
                         <h7 class="fw-semibold mb-3" id='jumlah_tugas_belum'></h7><br/><br/>
+                        </div>
                         <div class="d-flex align-items-center">
                             <div class="me-4">
                                 <span class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
@@ -265,7 +279,7 @@ include 'api/db_foto.php'
                     </thead>
                     <tbody>
                       <?php
-            $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "input_tugas");
+            $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
             if ($conn->connect_error) {
                 die("Koneksi gagal: " . $conn->connect_error);
             }

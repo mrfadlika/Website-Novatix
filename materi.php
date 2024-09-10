@@ -1,5 +1,4 @@
 <?php include 'api/check_sesi.php'; include 'api/db_foto.php'; ?>
-
 <!doctype html>
 <html lang="en">
 
@@ -7,10 +6,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Novatix</title>
-  <base href="../../">
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <script>
+        function detectDevice(event) {
+            event.preventDefault();
+            var userAgent = navigator.userAgent.toLowerCase();
+            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+            if (isMobile) {
+                window.location.href = "information_page";
+            } else {
+                window.location.href = "info";
+            }
+        }
+  </script>
   <style>
         .announcement-list {
             width: 80%;
@@ -39,20 +50,14 @@
         .announcement-content {
             flex: 1;
         }
-    </style>
-      <script>
-        function detectDevice(event) {
-            event.preventDefault();
-            var userAgent = navigator.userAgent.toLowerCase();
-            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-
-            if (isMobile) {
-                window.location.href = "information_page";
-            } else {
-                window.location.href = "info";
-            }
+        .limited-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        display: inline-block;
         }
-  </script>
+    </style>
 </head>
 
 <body>
@@ -205,54 +210,45 @@
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Pesan</h5>
+              <h5 class="card-title fw-semibold mb-4">Materi</h5>
               <div class="card">
                 <div class="card-body p-4">
                 <?php
-if (isset($_GET["id"])) {
-    $id = $_GET["id"];
+                $servername = 'localhost';
+                $username = 'nova';
+                $password = 'Raffifadlika!&55';
+                $db_name = 'realdatabasenovatix';
 
-    // Query untuk mengambil detail pesan dari tabel mailing
-    $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, filepath FROM mailing WHERE id=$id";
-    $result = $conn->query($sql);
+                $conn = new mysqli($servername, $username, $password, $db_name);
+                if ($conn->connect_error) {
+                  die("Connection Error: " . $conn->connect_error);
+                }
+        $sql = "SELECT id, judul, matkul, deskripsi, file_path, created_at FROM materi ORDER BY created_at DESC";
+        $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-
-        // Ambil nim dari kolom send_from
-        $send_from_nim = $row["send_to"];
-
-        // Query untuk mengambil nama berdasarkan nim dari tabel users
-        $sql_nama = "SELECT nama FROM users WHERE nim='$send_from_nim'";
-        $result_query = $conn->query($sql_nama);
-
-        if ($result_query->num_rows > 0) {
-            $user_row = $result_query->fetch_assoc();
-            $sender_name = $user_row["nama"];
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo "<div class='announcement-item'>";
+                echo "<div class='announcement-content'>";
+                echo "<h2>" . $row["judul"] . "</h2>";
+                $content_words = explode(' ', $row["matkul"]);
+                $limited_content = implode(' ', array_slice($content_words, 0, 15));
+                if (count($content_words) > 15) {
+                    $limited_content .= '...';
+                }
+                echo "<p>Mata Kuliah: " . $limited_content . "</p>";
+                echo "</div>"; 
+                echo "<span class='ti ti-eye fs-8' style='margin-right: 15px' onclick='showMateri(".$row["id"].")'></span>";
+                //echo "<span class='ti ti-trash fs-8 text-danger' onclick='deleteAnnouncement(" . $row["id"] . ")'></span>";
+                //echo "<hr>";
+                echo "</div>";
+            }
         } else {
-            $sender_name = "Unknown";
+            echo "Tidak ada Materi.";
         }
 
-        // Tampilkan pesan
-        echo "<h3>" . $row["subyek"] . "</h3>";
-        echo "<p style='margin-bottom: 30px'>to <strong>" . $sender_name . "</strong></p>";
-        echo "<h5 style='margin-bottom: 20px'>" . $row["isi_pesan"] . "</h5>";
-
-        // Jika ada file yang diunggah, tambahkan link untuk mengunduh
-        if (!empty($row["filepath"])) {
-            echo "<p><a class='btn btn-outline-primary' href='" . $row["filepath"] . "' download>Download File</a></p>";
-        }
-    } else {
-        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman.";
-        exit();
-    }
-} else {
-    echo "ID Pengumuman tidak diberikan.";
-}
-
-$conn->close();
-?>
-
+        $conn->close();
+        ?>
                 </div>
               </div>
             </div>
@@ -261,6 +257,27 @@ $conn->close();
       </div>
     </div>
   </div>
+  <script>
+        // function deleteMateri(id) {
+        //     if (confirm('Apakah Anda yakin ingin menghapus materi ini?')) {
+        //         fetch('api/delete_materi', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/x-www-form-urlencoded',
+        //             },
+        //             body: 'id=' + id
+        //         })
+        //         .then(response => response.text())
+        //         .then(data => {
+        //             alert(data);
+        //             location.reload();
+        //         });
+        //     }
+        // }
+        function showMateri(id) {
+          window.location.href = "materi/view?id=" + id;
+        }
+    </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>

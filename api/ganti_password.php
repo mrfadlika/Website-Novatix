@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ulangi_password_baru = $_POST['confirm_password'];
     $nim = $_SESSION['nim'];
 
-    $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "db_novatix");
+    $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
     if ($conn->connect_error) {
         die("Koneksi gagal: " . $conn->connect_error);
     }

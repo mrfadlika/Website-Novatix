@@ -9,7 +9,7 @@ if (!isset($_SESSION['nim'])) {
 
 $nim = $_SESSION['nim'];
 
-$conn = new mysqli('localhost', 'root', '', 'db_novatix');
+$conn = new mysqli('localhost', 'nova', 'Raffifadlika!&55', 'realdatabasenovatix');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -137,6 +137,18 @@ include 'api/db_foto.php';
                   <i class="ti ti-bell-ringing"></i>
                 </span>
                 <span class="hide-menu">Announcement</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">Lessons</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="materi" aria-expanded="false">
+                <span>
+                <i class="ti ti-books"></i>
+                </span>
+                <span class="hide-menu">Learning</span>
               </a>
             </li>
           </ul>

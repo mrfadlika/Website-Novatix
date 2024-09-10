@@ -2,7 +2,7 @@
 $servername = 'localhost';
 $username = 'nova';
 $password = 'Raffifadlika!&55';
-$dbname = 'pengumuman';
+$dbname = 'realdatabasenovatix';
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -12,6 +12,7 @@ if($conn->connect_error){
 
 $judul = $_POST['judul'];
 $konten = $_POST['konten'];
+$konten = $conn->real_escape_string($konten);
 $file_path = '';
 
 if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {

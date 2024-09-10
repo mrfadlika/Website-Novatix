@@ -1,4 +1,16 @@
 <?php include 'api/check_sesi.php'; include 'api/db_foto.php'; ?>
+<?php
+$servername = "localhost";
+$username = "nova";
+$password = "Raffifadlika!&55";
+$dbname = "realdatabasenovatix";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if($conn->connect_error){
+    die("Connection Failed: " . $conn->connect_error);
+}
+?>
 
 <!doctype html>
 <html lang="en">
@@ -7,10 +19,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Novatix</title>
-  <base href="../../">
+  <base href="../">
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <script>
+        function detectDevice(event) {
+            event.preventDefault();
+            var userAgent = navigator.userAgent.toLowerCase();
+            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+            if (isMobile) {
+                window.location.href = "information_page";
+            } else {
+                window.location.href = "info";
+            }
+        }
+  </script>
   <style>
         .announcement-list {
             width: 80%;
@@ -40,19 +65,6 @@
             flex: 1;
         }
     </style>
-      <script>
-        function detectDevice(event) {
-            event.preventDefault();
-            var userAgent = navigator.userAgent.toLowerCase();
-            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-
-            if (isMobile) {
-                window.location.href = "information_page";
-            } else {
-                window.location.href = "info";
-            }
-        }
-  </script>
 </head>
 
 <body>
@@ -205,54 +217,36 @@
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Pesan</h5>
+              <h5 class="card-title fw-semibold mb-4">Materi</h5>
+              <a href="materi" class="btn btn-outline-primary"><i class="ti ti-arrow-left"></i></a>
               <div class="card">
                 <div class="card-body p-4">
-                <?php
-if (isset($_GET["id"])) {
+                    <?php
+                if(isset($_GET["id"])){
     $id = $_GET["id"];
-
-    // Query untuk mengambil detail pesan dari tabel mailing
-    $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, filepath FROM mailing WHERE id=$id";
+    $sql = "SELECT judul, matkul, deskripsi, file_path, created_at FROM materi WHERE id=$id";
     $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
+    
+    if($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-
-        // Ambil nim dari kolom send_from
-        $send_from_nim = $row["send_to"];
-
-        // Query untuk mengambil nama berdasarkan nim dari tabel users
-        $sql_nama = "SELECT nama FROM users WHERE nim='$send_from_nim'";
-        $result_query = $conn->query($sql_nama);
-
-        if ($result_query->num_rows > 0) {
-            $user_row = $result_query->fetch_assoc();
-            $sender_name = $user_row["nama"];
-        } else {
-            $sender_name = "Unknown";
-        }
-
-        // Tampilkan pesan
-        echo "<h3>" . $row["subyek"] . "</h3>";
-        echo "<p style='margin-bottom: 30px'>to <strong>" . $sender_name . "</strong></p>";
-        echo "<h5 style='margin-bottom: 20px'>" . $row["isi_pesan"] . "</h5>";
-
-        // Jika ada file yang diunggah, tambahkan link untuk mengunduh
-        if (!empty($row["filepath"])) {
-            echo "<p><a class='btn btn-outline-primary' href='" . $row["filepath"] . "' download>Download File</a></p>";
+        echo "<h3>" . $row["judul"] . "</h3>";
+        echo "<p style='margin-bottom: 30px'>Mata Kuliah " .$row["matkul"]. "</p>";
+        echo "<h5 style='margin-bottom: 20px'>" .$row["deskripsi"]. "</h5>";
+        if (!empty($row["file_path"])) {
+            echo "<p><a class='btn btn-outline-primary' href='" . $row["file_path"] . "' download>Download File</a></p>";
         }
     } else {
-        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman.";
+        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman";
         exit();
     }
+
 } else {
-    echo "ID Pengumuman tidak diberikan.";
+    echo "ID Pengumuman tidak diberikan";
 }
 
 $conn->close();
-?>
 
+?>
                 </div>
               </div>
             </div>

@@ -5,9 +5,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $end = $_POST['end'];
 
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "jadwal";
+    $username = "nova";
+    $password = "Raffifadlika!&55";
+    $dbname = "realdatabasenovatix";
 
     $conn = new mysqli($servername, $username, $password, $dbname);
 

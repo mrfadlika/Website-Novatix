@@ -41,6 +41,18 @@ elseif($uri == 'mail/sended'){
 elseif($uri == 'mail/sended/view'){
     require 'view_sended_mail.php';
 }
+elseif($uri == 'profile/edit'){
+    require 'edit_data.php';
+}
+elseif($uri == 'dosen/add/tugas'){
+    require 'forms-dosen.php';
+}
+elseif($uri == 'dosen/add/materi'){
+    require 'materi-dosen.php';
+}
+elseif($uri == 'materi/view'){
+    require 'view_materi.php';
+}
 else {
     require '404.php';
 }

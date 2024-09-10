@@ -1,5 +1,4 @@
-<?php include 'api/check_sesi.php'; include 'api/db_foto.php'; ?>
-
+<?php include 'api/db_edit_data.php' ?>
 <!doctype html>
 <html lang="en">
 
@@ -7,52 +6,73 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Novatix</title>
-  <base href="../../">
+  <base href='../'>
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <style>
-        .announcement-list {
-            width: 80%;
-            margin: auto;
-        }
-        .announcement-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-        }
-        .announcement-item h2 {
-            margin: 0;
-        }
-        .announcement-item p {
-            margin: 5px 0;
-        }
-        .delete-button {
-            cursor: pointer;
-            color: red;
-            background: none;
-            border: none;
-            font-size: 16px;
-        }
-        .announcement-content {
-            flex: 1;
-        }
-    </style>
-      <script>
-        function detectDevice(event) {
-            event.preventDefault();
-            var userAgent = navigator.userAgent.toLowerCase();
-            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+    .profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
-            if (isMobile) {
-                window.location.href = "information_page";
-            } else {
-                window.location.href = "info";
-            }
-        }
-  </script>
+.profile-header h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.profile-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-info h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.profile-info p {
+    margin: 2px 0;
+    color: #666;
+}
+
+.personal-info, .address-info {
+    margin-bottom: 20px;
+}
+
+.personal-info h2, .address-info h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+p {
+    margin: 5px 0;
+}
+
+  </style>
 </head>
 
 <body>
@@ -101,7 +121,7 @@
             <li class="sidebar-item">
               <a class="sidebar-link" href="forms" aria-expanded="false">
                 <span>
-                  <i class="ti ti-file-upload"></i>
+                  <i class="ti ti-file-upload"></i> 
                 </span>
                 <span class="hide-menu">Forms</span>
               </a>
@@ -115,7 +135,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" onclick="detectDevice(event)" aria-expanded="false">
+              <a class="sidebar-link" href="info" aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>
@@ -169,7 +189,7 @@
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <a href="https://wa.me/62882020802944" target="_blank" class="btn btn-primary">Hubungi Admin</a>
+              <a href="https:wa.me/62882020802944" target="_blank" class="btn btn-primary">Hubungi Admin</a>
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -202,65 +222,72 @@
       </header>
       <!--  Header End -->
       <div class="container-fluid">
-        <div class="container-fluid">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Pesan</h5>
-              <div class="card">
-                <div class="card-body p-4">
-                <?php
-if (isset($_GET["id"])) {
-    $id = $_GET["id"];
-
-    // Query untuk mengambil detail pesan dari tabel mailing
-    $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, filepath FROM mailing WHERE id=$id";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-
-        // Ambil nim dari kolom send_from
-        $send_from_nim = $row["send_to"];
-
-        // Query untuk mengambil nama berdasarkan nim dari tabel users
-        $sql_nama = "SELECT nama FROM users WHERE nim='$send_from_nim'";
-        $result_query = $conn->query($sql_nama);
-
-        if ($result_query->num_rows > 0) {
-            $user_row = $result_query->fetch_assoc();
-            $sender_name = $user_row["nama"];
-        } else {
-            $sender_name = "Unknown";
-        }
-
-        // Tampilkan pesan
-        echo "<h3>" . $row["subyek"] . "</h3>";
-        echo "<p style='margin-bottom: 30px'>to <strong>" . $sender_name . "</strong></p>";
-        echo "<h5 style='margin-bottom: 20px'>" . $row["isi_pesan"] . "</h5>";
-
-        // Jika ada file yang diunggah, tambahkan link untuk mengunduh
-        if (!empty($row["filepath"])) {
-            echo "<p><a class='btn btn-outline-primary' href='" . $row["filepath"] . "' download>Download File</a></p>";
-        }
-    } else {
-        echo "Pengumuman tidak ditemukan, kembali dan refresh halaman.";
-        exit();
-    }
-} else {
-    echo "ID Pengumuman tidak diberikan.";
-}
-
-$conn->close();
-?>
-
-                </div>
+        <div class="profile-header">
+          <h5 class="card-title fw-semibold mb-4">My Profile</h5>
+          <div class='card'>
+            <div class='card-body' style='display: flex; align-items: center;'>
+              <?php
+              if (!empty($row['foto_profil'])) {
+                echo "<img src='uploads/".$row['foto_profil']."' alt='Foto Mahasiswa' width='80' height='80' class='rounded-circle' style='margin-right: 50px'>";
+              } else {
+                echo "<img src='images/profile/user-1.jpg' alt='Foto Mahasiswa' width='80' height='80' class='rounded-circle' style='margin-right: 50px'>";
+              }
+              ?>
+              <div class='info' style='flex: 1;'>
+                <h3 style='margin-right: 200px'><?php echo !empty($row['nama']) ? $row["nama"] : '-'; ?></h3>
+                <p>Mahasiswa</p>
               </div>
+            </div>
+            <div class='card-body'>
+              <form method="post" action="edit_data" enctype="multipart/form-data">
+                <div class='personal-info'>
+                  <h4>Personal Information</h4>
+                  <div class='info-grid'>
+                    <div>
+                      <label>Name</label>
+                      <input type="text" name="nama" value="<?php echo $row['nama']; ?>" class="form-control">
+                    </div>
+                    <div>
+                      <label>NIM</label>
+                      <p><?php echo $_SESSION['nim']; ?></p>
+                    </div>
+                    <div>
+                      <label>Email</label>
+                      <input type="email" name="email" value="<?php echo $row['email']; ?>" class="form-control">
+                    </div>
+                    <div>
+                      <label>Phone</label>
+                      <input type="text" name="nomor_hp" value="<?php echo $row['nomor_hp']; ?>" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class='address-info'>
+                  <h4>Discourse</h4>
+                  <div class='info-grid'>
+                    <div>
+                      <label>Kampus</label>
+                      <p>Politeknik Negeri Ujung Pandang</p>
+                    </div>
+                    <div>
+                      <label>Jurusan</label>
+                      <p>Teknik Informatika dan Komputer</p>
+                    </div>
+                    <div>
+                      <label>Prodi</label>
+                      <p>Teknik Multimedia dan Jaringan</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label for="foto_profil">Upload New Profile Picture:</label>
+                  <input type="file" name="foto_profil" id="foto_profil" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Submit</button>
+              </form>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>

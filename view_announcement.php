@@ -1,9 +1,9 @@
-<?php session_start(); include 'api/db_foto.php' ?>
+<?php include 'api/check_sesi.php'; include 'api/db_foto.php'; ?>
 <?php
 $servername = "localhost";
 $username = "nova";
 $password = "Raffifadlika!&55";
-$dbname = "pengumuman";
+$dbname = "realdatabasenovatix";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -142,6 +142,18 @@ if($conn->connect_error){
                 <span class="hide-menu">Announcement</span>
               </a>
             </li>
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">Lessons</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="materi" aria-expanded="false">
+                <span>
+                <i class="ti ti-books"></i>
+                </span>
+                <span class="hide-menu">Learning</span>
+              </a>
+            </li>
           </ul>
         </nav>
         <!-- End Sidebar navigation -->
@@ -218,7 +230,7 @@ if($conn->connect_error){
         $row = $result->fetch_assoc();
         echo "<h3>" . $row["judul"] . "</h3>";
         echo "<p style='margin-bottom: 30px'>Created at " .$row["created_at"]. "</p>";
-        echo "<h5 style='margin-bottom: 20px'>" .$row["konten"]. "</h5>";
+        echo "<h5 style='margin-bottom: 20px'>" .nl2br($row["konten"]). "</h5>";
         if (!empty($row["file_path"])) {
             echo "<p><a class='btn btn-outline-primary' href='" . $row["file_path"] . "' download>Download File</a></p>";
         }

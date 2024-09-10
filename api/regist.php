@@ -3,7 +3,7 @@
         $servername = "localhost"; 
         $username = "nova";
         $password = "Raffifadlika!&55";
-        $dbname = "db_novatix";
+        $dbname = "realdatabasenovatix";
 
         $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -21,7 +21,7 @@
         $sql = "INSERT INTO users (nama, email, nomor_hp, tanggal_lahir, nim, password) VALUES ('$name', '$email', '$phone', '$birthdate', '$nim', '$password')";
 
         if ($conn->query($sql) === TRUE) {
-            header('Location: login');
+            header('Location: ../login');
             exit();
         } else {
             $_SESSION['error'] = "Error: " . $sql . "<br>" . $conn->error;

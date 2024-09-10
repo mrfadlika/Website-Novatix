@@ -2,7 +2,7 @@
 session_start();
 
 // Koneksi ke database
-$conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "db_novatix");
+$conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
@@ -34,9 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $target_file = $upload_dir . $file_name;
             }
 
-            // Pindahkan file ke direktori tujuan
             if (move_uploaded_file($file_tmp_name, $target_file)) {
-                // Siapkan dan jalankan pernyataan SQL dengan parameter untuk keamanan
                 $stmt = $conn->prepare("UPDATE users SET foto_profil = ? WHERE nim = ?");
                 $stmt->bind_param("ss", $file_name, $nim);
 

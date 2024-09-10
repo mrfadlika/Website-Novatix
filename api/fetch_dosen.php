@@ -2,12 +2,12 @@
 if (isset($_GET['id'])) {
     $id = $_GET['id']; 
     
-    $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "input_tugas");
+    $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
     if ($conn->connect_error) {
         die("Koneksi gagal: " . $conn->connect_error);
     }
 
-    $stmt = $conn->prepare("SELECT penanggung_jawab FROM diketahui WHERE id = ?");
+    $stmt = $conn->prepare("SELECT penanggungjawab FROM schedules WHERE id = ?");
     if ($stmt) {
         $stmt->bind_param("i", $id);
         $stmt->execute();
