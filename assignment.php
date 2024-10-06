@@ -291,6 +291,7 @@ include 'api/db_foto.php';
                 $actionText = "<span class='ti ti-trash fs-6' style='margin-right: 20px' onclick='deleteTugas(" . $row['id'] . ")'></span>";
                 if ($row['status'] == 0) {
                   $actionText .= " <span class='ti ti-circle-check fs-6' onclick='updateStatus(" . $row['id'] . ")'></span>";
+                  $actionText .= "<a class='ti ti-edit fs-6' href='assignment/edit?id=" . $row['id'] . "' style='margin-left: 15px'></a>";
                 }
                   
                 echo "<tr>";
