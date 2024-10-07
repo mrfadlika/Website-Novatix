@@ -3,8 +3,8 @@ session_start();
 
 if (!isset($_SESSION['nim'])) {
   $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
-    header('Location: login'); 
-    exit();
+  header('Location: login');
+  exit();
 }
 
 $nim = $_SESSION['nim'];
@@ -12,7 +12,7 @@ $nim = $_SESSION['nim'];
 $conn = new mysqli('localhost', 'nova', 'Raffifadlika!&55', 'realdatabasenovatix');
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . $conn->connect_error);
 }
 
 $sql = "SELECT * FROM users WHERE nim = ?";
@@ -38,30 +38,31 @@ include 'api/db_foto.php';
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-    <script>
-        function detectDevice(event) {
-            event.preventDefault();
-            var userAgent = navigator.userAgent.toLowerCase();
-            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <script>
+    function detectDevice(event) {
+      event.preventDefault();
+      var userAgent = navigator.userAgent.toLowerCase();
+      var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
 
-            if (isMobile) {
-                window.location.href = "information_page";
-            } else {
-                window.location.href = "info";
-            }
-        }
+      if (isMobile) {
+        window.location.href = "information_page";
+      } else {
+        window.location.href = "info";
+      }
+    }
   </script>
   <style>
-        #calendar {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .today-cell {
-            background-color: #d3d3d3 !important; 
-        }
-    </style>
+    #calendar {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .today-cell {
+      background-color: #d3d3d3 !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -146,7 +147,7 @@ include 'api/db_foto.php';
             <li class="sidebar-item">
               <a class="sidebar-link" href="materi" aria-expanded="false">
                 <span>
-                <i class="ti ti-books"></i>
+                  <i class="ti ti-books"></i>
                 </span>
                 <span class="hide-menu">Learning</span>
               </a>
@@ -170,10 +171,11 @@ include 'api/db_foto.php';
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
+              <?php if (empty($row['nama'])) {
+                echo "<h5>Hi! Please Login First</h5>";
+              } else {
+                echo "<h5>Hi! " . $row['nama'] . "</h5>";
+              } ?>
             </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
@@ -182,10 +184,11 @@ include 'api/db_foto.php';
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <?php if(empty($row['foto_profil'])) {
-                      echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
+                  <?php if (empty($row['foto_profil'])) {
+                    echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
                   } else {
-                      echo "<img src='uploads/".$row['foto_profil']."' alt='' width='35' height='35' class='rounded-circle'>"; } ?>
+                    echo "<img src='uploads/" . $row['foto_profil'] . "' alt='' width='35' height='35' class='rounded-circle'>";
+                  } ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
@@ -223,49 +226,49 @@ include 'api/db_foto.php';
     </div>
   </div>
   <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: 'api/events',
-                datesSet: function(info) {
-                    hideOutOfMonthWeeks(info);
-                },
-                dayCellClassNames: function(arg) {
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    const cellDate = new Date(arg.date);
-                    cellDate.setHours(0, 0, 0, 0);
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: 'api/events',
+        datesSet: function(info) {
+          hideOutOfMonthWeeks(info);
+        },
+        dayCellClassNames: function(arg) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const cellDate = new Date(arg.date);
+          cellDate.setHours(0, 0, 0, 0);
 
-                    if (cellDate.getTime() === today.getTime()) {
-                        return ['today-cell'];
-                    }
-                }
-            });
+          if (cellDate.getTime() === today.getTime()) {
+            return ['today-cell'];
+          }
+        }
+      });
 
-            calendar.render();
+      calendar.render();
 
-            function hideOutOfMonthWeeks(info) {
-                var weeks = document.querySelectorAll('.fc-daygrid-week');
+      function hideOutOfMonthWeeks(info) {
+        var weeks = document.querySelectorAll('.fc-daygrid-week');
 
-                weeks.forEach(function(week) {
-                    var allDaysOutOfMonth = true;
+        weeks.forEach(function(week) {
+          var allDaysOutOfMonth = true;
 
-                    week.querySelectorAll('.fc-daygrid-day').forEach(function(day) {
-                        var date = new Date(day.dataset.date);
+          week.querySelectorAll('.fc-daygrid-day').forEach(function(day) {
+            var date = new Date(day.dataset.date);
 
-                        if (date.getMonth() === info.view.currentStart.getMonth()) {
-                            allDaysOutOfMonth = false;
-                        }
-                    });
-
-                    if (allDaysOutOfMonth) {
-                        week.style.display = 'none';
-                    }
-                });
+            if (date.getMonth() === info.view.currentStart.getMonth()) {
+              allDaysOutOfMonth = false;
             }
+          });
+
+          if (allDaysOutOfMonth) {
+            week.style.display = 'none';
+          }
         });
-    </script>
+      }
+    });
+  </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>

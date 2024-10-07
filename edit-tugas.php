@@ -179,7 +179,7 @@ include 'api/db_edit_tugas.php'
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Tambahkan Tugas</h5>
+              <h5 class="card-title fw-semibold mb-4">Edit Tugas</h5>
               <div class="card">
                 <div class="card-body">
                   <form action="assignment/edit?id=<?php echo $row['id']; ?>" method="post">

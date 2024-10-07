@@ -12,7 +12,7 @@ if($conn->connect_error){
 
 if(isset($_SESSION['nim'])) {
     $nim = $_SESSION['nim'];
-    $sql = "SELECT foto_profil FROM users WHERE nim = '$nim'";
+    $sql = "SELECT * FROM users WHERE nim = '$nim'";
     $result = $conn->query($sql);
     if($result->num_rows > 0) {
         $row = $result->fetch_assoc();

@@ -211,10 +211,11 @@ include 'api/db_foto.php';
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
+            <?php if(empty($row['nama'])) {
+                echo "<h5>Welcome User</h5>";
+              } else {
+                echo "<h5>Hi! ". $row['nama']."</h5>";
+              } ?>
             </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">

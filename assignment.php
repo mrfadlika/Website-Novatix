@@ -3,8 +3,8 @@ session_start();
 
 if (!isset($_SESSION['nim'])) {
   $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
-    header('Location: login'); 
-    exit();
+  header('Location: login');
+  exit();
 }
 
 $nim = $_SESSION['nim'];
@@ -12,7 +12,7 @@ $nim = $_SESSION['nim'];
 $conn = new mysqli('localhost', 'nova', 'Raffifadlika!&55', 'realdatabasenovatix');
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . $conn->connect_error);
 }
 
 $sql = "SELECT * FROM users WHERE nim = ?";
@@ -23,7 +23,7 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
 $stmt->close();
-$conn->close(); 
+$conn->close();
 
 include 'api/db_foto.php';
 ?>
@@ -41,53 +41,56 @@ include 'api/db_foto.php';
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@1.39.1/iconfont/tabler-icons.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <style>
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        #receipt-content {
-            width: 100%;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .table th, .table td {
-            padding: 12px 15px;
-            vertical-align: middle;
-            word-wrap: break-word;
-        }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-        .description {
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            position: relative;
-        }
+    #receipt-content {
+      width: 100%;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
 
-        .description.expanded {
-            white-space: normal;
-        }
+    .table th,
+    .table td {
+      padding: 12px 15px;
+      vertical-align: middle;
+      word-wrap: break-word;
+    }
 
-        .toggle-description {
-            color: #007bff;
-            cursor: pointer;
-            display: block;
-            margin-top: 5px;
-        }
-    </style>
-      <script>
-        function detectDevice(event) {
-            event.preventDefault();
-            var userAgent = navigator.userAgent.toLowerCase();
-            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+    .description {
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      position: relative;
+    }
 
-            if (isMobile) {
-                window.location.href = "information_page";
-            } else {
-                window.location.href = "info";
-            }
-        }
+    .description.expanded {
+      white-space: normal;
+    }
+
+    .toggle-description {
+      color: #007bff;
+      cursor: pointer;
+      display: block;
+      margin-top: 5px;
+    }
+  </style>
+  <script>
+    function detectDevice(event) {
+      event.preventDefault();
+      var userAgent = navigator.userAgent.toLowerCase();
+      var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+      if (isMobile) {
+        window.location.href = "information_page";
+      } else {
+        window.location.href = "info";
+      }
+    }
   </script>
 </head>
 
@@ -129,7 +132,7 @@ include 'api/db_foto.php';
             <li class="sidebar-item">
               <a class="sidebar-link" href="assignment" aria-expanded="false">
                 <span>
-                <i class="ti ti-list-check"></i>
+                  <i class="ti ti-list-check"></i>
                 </span>
                 <span class="hide-menu">Assignment</span>
               </a>
@@ -173,7 +176,7 @@ include 'api/db_foto.php';
             <li class="sidebar-item">
               <a class="sidebar-link" href="materi" aria-expanded="false">
                 <span>
-                <i class="ti ti-books"></i>
+                  <i class="ti ti-books"></i>
                 </span>
                 <span class="hide-menu">Learning</span>
               </a>
@@ -197,10 +200,11 @@ include 'api/db_foto.php';
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
+              <?php if (empty($row['nama'])) {
+                echo "<h5>Hi! Please Login First</h5>";
+              } else {
+                echo "<h5>Hi! " . $row['nama'] . "</h5>";
+              } ?>
             </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
@@ -209,10 +213,11 @@ include 'api/db_foto.php';
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <?php if(empty($row['foto_profil'])) {
-                      echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
+                  <?php if (empty($row['foto_profil'])) {
+                    echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
                   } else {
-                      echo "<img src='uploads/".$row['foto_profil']."' alt='' width='35' height='35' class='rounded-circle'>"; } ?>
+                    echo "<img src='uploads/" . $row['foto_profil'] . "' alt='' width='35' height='35' class='rounded-circle'>";
+                  } ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
@@ -241,155 +246,156 @@ include 'api/db_foto.php';
         <div class="container-fluid">
           <div class="card">
             <div id="receipt-content">
-            <div class="table-responsive">
-                  <table class="table text-nowrap mb-0 align-middle">
-                    <thead class="text-dark fs-4">
-                      <tr>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Nama Tugas</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Mata Kuliah</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Deadlines</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Deskripsi</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Status</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Aksi</h6>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
+              <div class="table-responsive">
+                <table class="table text-nowrap mb-0 align-middle">
+                  <thead class="text-dark fs-4">
+                    <tr>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Nama Tugas</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Mata Kuliah</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Deadlines</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Deskripsi</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Status</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Aksi</h6>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
                     <?php
-        // Koneksi ke database
-        $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
-        if ($conn->connect_error) {
-            die("Koneksi gagal: " . $conn->connect_error);
-        }
+                    // Koneksi ke database
+                    $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
+                    if ($conn->connect_error) {
+                      die("Koneksi gagal: " . $conn->connect_error);
+                    }
 
-        // Ambil data dari tabel tugas
-        $sql = "SELECT id, nama_tugas, mata_kuliah, deadline, deskripsi, status FROM tugas ORDER BY id DESC";
-        $result = $conn->query($sql);
+                    // Ambil data dari tabel tugas
+                    $sql = "SELECT id, nama_tugas, mata_kuliah, deadline, deskripsi, status FROM tugas ORDER BY id DESC";
+                    $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $statusText = $row['status'] ? "<span class='badge bg-secondary rounded-3 fw-semibold'>Selesai</span>" : "<span class='badge bg-danger rounded-3 fw-semibold'>Belum Selesai</span>";
+                    if ($result->num_rows > 0) {
+                      while ($row = $result->fetch_assoc()) {
+                        $statusText = $row['status'] ? "<span class='badge bg-secondary rounded-3 fw-semibold'>Selesai</span>" : "<span class='badge bg-danger rounded-3 fw-semibold'>Belum Selesai</span>";
 
-                $description = $row['deskripsi'];
-                $descriptionLines = explode(' ', $description);
-                $shortDescription = implode(' ', array_slice($descriptionLines, 0, 5));
-                if (count($descriptionLines) > 5) {
-                    $shortDescription .= '...';
-                }
-                
-                $actionText = "<span class='ti ti-trash fs-6' style='margin-right: 20px' onclick='deleteTugas(" . $row['id'] . ")'></span>";
-                if ($row['status'] == 0) {
-                  $actionText .= " <span class='ti ti-circle-check fs-6' onclick='updateStatus(" . $row['id'] . ")'></span>";
-                  $actionText .= "<a class='ti ti-edit fs-6' href='assignment/edit?id=" . $row['id'] . "' style='margin-left: 15px'></a>";
-                }
-                  
-                echo "<tr>";
-                echo "<td>" . $row['nama_tugas'] . "</td>";
-                echo "<td>" . $row['mata_kuliah'] . "</td>";
-                echo "<td>" . $row['deadline'] . "</td>";
-                echo "<td>
+                        $description = $row['deskripsi'];
+                        $descriptionLines = explode(' ', $description);
+                        $shortDescription = implode(' ', array_slice($descriptionLines, 0, 5));
+                        if (count($descriptionLines) > 5) {
+                          $shortDescription .= '...';
+                        }
+
+                        $actionText = "<span class='ti ti-trash fs-6' style='margin-right: 20px' onclick='deleteTugas(" . $row['id'] . ")'></span>";
+                        if ($row['status'] == 0) {
+                          $actionText .= " <span class='ti ti-circle-check fs-6' onclick='updateStatus(" . $row['id'] . ")'></span>";
+                          $actionText .= "<a class='ti ti-edit fs-6' href='assignment/edit?id=" . $row['id'] . "' style='margin-left: 15px'></a>";
+                        }
+
+                        echo "<tr>";
+                        echo "<td>" . $row['nama_tugas'] . "</td>";
+                        echo "<td>" . $row['mata_kuliah'] . "</td>";
+                        echo "<td>" . $row['deadline'] . "</td>";
+                        echo "<td>
                 <div class='description'>
                     <span class='description-text'>" . $description . "</span>
                     <a href='#' class='toggle-description' data-id='" . $row['id'] . "'>Lihat Selengkapnya</a>
                 </div>
               </td>";
-                echo "<td>" . $statusText . "</td>";
-                echo "<td>" . $actionText . "</td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='6'>Tidak ada data tugas</td></tr>";
-        }
+                        echo "<td>" . $statusText . "</td>";
+                        echo "<td>" . $actionText . "</td>";
+                        echo "</tr>";
+                      }
+                    } else {
+                      echo "<tr><td colspan='6'>Tidak ada data tugas</td></tr>";
+                    }
 
-        $conn->close();
-        ?>
-                    </tbody>
-                  </table>
-                </div>
+                    $conn->close();
+                    ?>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-          <form action="api/generate_pdf" method="get">
-            <button class="btn btn-outline-secondary m-1" type="submit">Download PDF</button>
-          </form>
         </div>
+        <form action="api/generate_pdf" method="get">
+          <button class="btn btn-outline-secondary m-1" type="submit">Download PDF</button>
+        </form>
       </div>
     </div>
   </div>
+  </div>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const toggles = document.querySelectorAll('.toggle-description');
-        toggles.forEach(toggle => {
-            const descriptionDiv = toggle.closest('.description');
-            const descriptionText = descriptionDiv.querySelector('.description-text').textContent;
-            const wordCount = descriptionText.trim().split(/\s+/).length;
+      const toggles = document.querySelectorAll('.toggle-description');
+      toggles.forEach(toggle => {
+        const descriptionDiv = toggle.closest('.description');
+        const descriptionText = descriptionDiv.querySelector('.description-text').textContent;
+        const wordCount = descriptionText.trim().split(/\s+/).length;
 
-            if (wordCount <= 5) {
-                toggle.style.display = 'none';
-            }
+        if (wordCount <= 5) {
+          toggle.style.display = 'none';
+        }
 
-            toggle.addEventListener('click', function(event) {
-                event.preventDefault();
+        toggle.addEventListener('click', function(event) {
+          event.preventDefault();
 
-                if (descriptionDiv.classList.contains('expanded')) {
-                    this.textContent = 'Lihat Selengkapnya';
-                } else {
-                    this.textContent = 'Lihat Lebih Sedikit';
-                }
+          if (descriptionDiv.classList.contains('expanded')) {
+            this.textContent = 'Lihat Selengkapnya';
+          } else {
+            this.textContent = 'Lihat Lebih Sedikit';
+          }
 
-                descriptionDiv.classList.toggle('expanded');
-            });
+          descriptionDiv.classList.toggle('expanded');
         });
+      });
     });
-</script>
-<script>
-          function deleteTugas(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus tugas ini?')) {
-                fetch('api/delete_tugas', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'id=' + id
-                })
-                .then(response => response.text())
-                .then(data => {
-                    alert(data);
-                    location.reload();
-                });
-            }
-          }
-          function updateStatus(id) {
-            if (confirm('Apakah Anda yakin telah menyelesaikan tugas ini?')) {
-                fetch('api/update_status', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'id=' + id
-                })
-                .then(response => response.text())
-                .then(data => {
-                    alert(data);
-                    location.reload();
-                });
-            }
-          }
   </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
-    <!-- <script>
+  <script>
+    function deleteTugas(id) {
+      if (confirm('Apakah Anda yakin ingin menghapus tugas ini?')) {
+        fetch('api/delete_tugas', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'id=' + id
+          })
+          .then(response => response.text())
+          .then(data => {
+            alert(data);
+            location.reload();
+          });
+      }
+    }
+
+    function updateStatus(id) {
+      if (confirm('Apakah Anda yakin telah menyelesaikan tugas ini?')) {
+        fetch('api/update_status', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'id=' + id
+          })
+          .then(response => response.text())
+          .then(data => {
+            alert(data);
+            location.reload();
+          });
+      }
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+  <!-- <script>
         function generatePDF() {
             html2canvas(document.getElementById('receipt-content')).then(function(canvas) {
                 var imgData = canvas.toDataURL('image/png');

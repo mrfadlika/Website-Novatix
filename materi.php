@@ -1,4 +1,5 @@
-<?php include 'api/check_sesi.php'; include 'api/db_foto.php'; ?>
+<?php include 'api/check_sesi.php';
+include 'api/db_foto.php'; ?>
 <!doctype html>
 <html lang="en">
 
@@ -10,54 +11,60 @@
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <script>
-        function detectDevice(event) {
-            event.preventDefault();
-            var userAgent = navigator.userAgent.toLowerCase();
-            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+    function detectDevice(event) {
+      event.preventDefault();
+      var userAgent = navigator.userAgent.toLowerCase();
+      var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
 
-            if (isMobile) {
-                window.location.href = "information_page";
-            } else {
-                window.location.href = "info";
-            }
-        }
+      if (isMobile) {
+        window.location.href = "information_page";
+      } else {
+        window.location.href = "info";
+      }
+    }
   </script>
   <style>
-        .announcement-list {
-            width: 80%;
-            margin: auto;
-        }
-        .announcement-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-        }
-        .announcement-item h2 {
-            margin: 0;
-        }
-        .announcement-item p {
-            margin: 5px 0;
-        }
-        .delete-button {
-            cursor: pointer;
-            color: red;
-            background: none;
-            border: none;
-            font-size: 16px;
-        }
-        .announcement-content {
-            flex: 1;
-        }
-        .limited-text {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-        display: inline-block;
-        }
-    </style>
+    .announcement-list {
+      width: 80%;
+      margin: auto;
+    }
+
+    .announcement-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+
+    .announcement-item h2 {
+      margin: 0;
+    }
+
+    .announcement-item p {
+      margin: 5px 0;
+    }
+
+    .delete-button {
+      cursor: pointer;
+      color: red;
+      background: none;
+      border: none;
+      font-size: 16px;
+    }
+
+    .announcement-content {
+      flex: 1;
+    }
+
+    .limited-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      display: inline-block;
+    }
+  </style>
 </head>
 
 <body>
@@ -142,7 +149,7 @@
             <li class="sidebar-item">
               <a class="sidebar-link" href="materi" aria-expanded="false">
                 <span>
-                <i class="ti ti-books"></i>
+                  <i class="ti ti-books"></i>
                 </span>
                 <span class="hide-menu">Learning</span>
               </a>
@@ -166,10 +173,11 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
+              <?php if (empty($row['nama'])) {
+                echo "<h5>Hi! Please Login First</h5>";
+              } else {
+                echo "<h5>Hi! " . $row['nama'] . "</h5>";
+              } ?>
             </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
@@ -178,10 +186,11 @@
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <?php if(empty($row['foto_profil'])) {
-                      echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
+                  <?php if (empty($row['foto_profil'])) {
+                    echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
                   } else {
-                      echo "<img src='uploads/".$row['foto_profil']."' alt='' width='35' height='35' class='rounded-circle'>"; } ?>
+                    echo "<img src='uploads/" . $row['foto_profil'] . "' alt='' width='35' height='35' class='rounded-circle'>";
+                  } ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
@@ -213,42 +222,42 @@
               <h5 class="card-title fw-semibold mb-4">Materi</h5>
               <div class="card">
                 <div class="card-body p-4">
-                <?php
-                $servername = 'localhost';
-                $username = 'nova';
-                $password = 'Raffifadlika!&55';
-                $db_name = 'realdatabasenovatix';
+                  <?php
+                  $servername = 'localhost';
+                  $username = 'nova';
+                  $password = 'Raffifadlika!&55';
+                  $db_name = 'realdatabasenovatix';
 
-                $conn = new mysqli($servername, $username, $password, $db_name);
-                if ($conn->connect_error) {
-                  die("Connection Error: " . $conn->connect_error);
-                }
-        $sql = "SELECT id, judul, matkul, deskripsi, file_path, created_at FROM materi ORDER BY created_at DESC";
-        $result = $conn->query($sql);
+                  $conn = new mysqli($servername, $username, $password, $db_name);
+                  if ($conn->connect_error) {
+                    die("Connection Error: " . $conn->connect_error);
+                  }
+                  $sql = "SELECT id, judul, matkul, deskripsi, file_path, created_at FROM materi ORDER BY created_at DESC";
+                  $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                echo "<div class='announcement-item'>";
-                echo "<div class='announcement-content'>";
-                echo "<h2>" . $row["judul"] . "</h2>";
-                $content_words = explode(' ', $row["matkul"]);
-                $limited_content = implode(' ', array_slice($content_words, 0, 15));
-                if (count($content_words) > 15) {
-                    $limited_content .= '...';
-                }
-                echo "<p>Mata Kuliah: " . $limited_content . "</p>";
-                echo "</div>"; 
-                echo "<span class='ti ti-eye fs-8' style='margin-right: 15px' onclick='showMateri(".$row["id"].")'></span>";
-                //echo "<span class='ti ti-trash fs-8 text-danger' onclick='deleteAnnouncement(" . $row["id"] . ")'></span>";
-                //echo "<hr>";
-                echo "</div>";
-            }
-        } else {
-            echo "Tidak ada Materi.";
-        }
+                  if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                      echo "<div class='announcement-item'>";
+                      echo "<div class='announcement-content'>";
+                      echo "<h2>" . $row["judul"] . "</h2>";
+                      $content_words = explode(' ', $row["matkul"]);
+                      $limited_content = implode(' ', array_slice($content_words, 0, 15));
+                      if (count($content_words) > 15) {
+                        $limited_content .= '...';
+                      }
+                      echo "<p>Mata Kuliah: " . $limited_content . "</p>";
+                      echo "</div>";
+                      echo "<span class='ti ti-eye fs-8' style='margin-right: 15px' onclick='showMateri(" . $row["id"] . ")'></span>";
+                      //echo "<span class='ti ti-trash fs-8 text-danger' onclick='deleteAnnouncement(" . $row["id"] . ")'></span>";
+                      //echo "<hr>";
+                      echo "</div>";
+                    }
+                  } else {
+                    echo "Tidak ada Materi.";
+                  }
 
-        $conn->close();
-        ?>
+                  $conn->close();
+                  ?>
                 </div>
               </div>
             </div>
@@ -258,26 +267,26 @@
     </div>
   </div>
   <script>
-        // function deleteMateri(id) {
-        //     if (confirm('Apakah Anda yakin ingin menghapus materi ini?')) {
-        //         fetch('api/delete_materi', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/x-www-form-urlencoded',
-        //             },
-        //             body: 'id=' + id
-        //         })
-        //         .then(response => response.text())
-        //         .then(data => {
-        //             alert(data);
-        //             location.reload();
-        //         });
-        //     }
-        // }
-        function showMateri(id) {
-          window.location.href = "materi/view?id=" + id;
-        }
-    </script>
+    // function deleteMateri(id) {
+    //     if (confirm('Apakah Anda yakin ingin menghapus materi ini?')) {
+    //         fetch('api/delete_materi', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/x-www-form-urlencoded',
+    //             },
+    //             body: 'id=' + id
+    //         })
+    //         .then(response => response.text())
+    //         .then(data => {
+    //             alert(data);
+    //             location.reload();
+    //         });
+    //     }
+    // }
+    function showMateri(id) {
+      window.location.href = "materi/view?id=" + id;
+    }
+  </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>
