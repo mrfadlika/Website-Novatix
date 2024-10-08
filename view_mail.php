@@ -213,7 +213,7 @@ if (isset($_GET["id"])) {
     $id = $_GET["id"];
 
     // Query untuk mengambil detail pesan dari tabel mailing
-    $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, filepath FROM mailing WHERE id=$id";
+    $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, file_path FROM mailing WHERE id=$id";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -239,8 +239,8 @@ if (isset($_GET["id"])) {
         echo "<h5 style='margin-bottom: 20px'>" . $row["isi_pesan"] . "</h5>";
 
         // Jika ada file yang diunggah, tambahkan link untuk mengunduh
-        if (!empty($row["filepath"])) {
-            echo "<p><a class='btn btn-outline-primary' href='" . $row["filepath"] . "' download>Download File</a></p>";
+        if (!empty($row["file_path"])) {
+            echo "<p><a class='btn btn-outline-primary' href='" . $row["file_path"] . "' download>Download File</a></p>";
         }
         echo "<p><a class='btn btn-primary' href='mail/reply?id=$id'><i class='ti ti-pencil' style='margin-right:10px'></i>Balas Pesan</a></p>";
     } else {
