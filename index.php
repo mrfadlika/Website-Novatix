@@ -1,10 +1,10 @@
 <?php
-session_start(); 
+session_start();
 
 if (!isset($_SESSION['nim'])) {
   $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
-    header('Location: login'); 
-    exit();
+  header('Location: login');
+  exit();
 }
 
 $nim = $_SESSION['nim'];
@@ -12,7 +12,7 @@ $nim = $_SESSION['nim'];
 $conn = new mysqli('localhost', 'nova', 'Raffifadlika!&55', 'realdatabasenovatix');
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . $conn->connect_error);
 }
 
 $sql = "SELECT * FROM users WHERE nim = ?";
@@ -23,7 +23,7 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
 $stmt->close();
-$conn->close();
+//$conn->close();
 
 include 'api/db_foto.php'
 ?>
@@ -41,17 +41,17 @@ include 'api/db_foto.php'
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@1.39.1/iconfont/tabler-icons.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <script>
-        function detectDevice(event) {
-            event.preventDefault();
-            var userAgent = navigator.userAgent.toLowerCase();
-            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+    function detectDevice(event) {
+      event.preventDefault();
+      var userAgent = navigator.userAgent.toLowerCase();
+      var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
 
-            if (isMobile) {
-                window.location.href = "information_page";
-            } else {
-                window.location.href = "info";
-            }
-        }
+      if (isMobile) {
+        window.location.href = "information_page";
+      } else {
+        window.location.href = "info";
+      }
+    }
   </script>
 </head>
 
@@ -93,7 +93,7 @@ include 'api/db_foto.php'
             <li class="sidebar-item">
               <a class="sidebar-link" href="assignment" aria-expanded="false">
                 <span>
-                <i class="ti ti-list-check"></i>
+                  <i class="ti ti-list-check"></i>
                 </span>
                 <span class="hide-menu">Assignment</span>
               </a>
@@ -101,7 +101,7 @@ include 'api/db_foto.php'
             <li class="sidebar-item">
               <a class="sidebar-link" href="./forms" aria-expanded="false">
                 <span>
-                <i class="ti ti-file-upload"></i>
+                  <i class="ti ti-file-upload"></i>
                 </span>
                 <span class="hide-menu">Forms</span>
               </a>
@@ -137,7 +137,7 @@ include 'api/db_foto.php'
             <li class="sidebar-item">
               <a class="sidebar-link" href="materi" aria-expanded="false">
                 <span>
-                <i class="ti ti-books"></i>
+                  <i class="ti ti-books"></i>
                 </span>
                 <span class="hide-menu">Learning</span>
               </a>
@@ -161,10 +161,11 @@ include 'api/db_foto.php'
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
+              <?php if (empty($row['nama'])) {
+                echo "<h5>Hi! Please Login First</h5>";
+              } else {
+                echo "<h5>Hi! " . $row['nama'] . "</h5>";
+              } ?>
             </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
@@ -173,10 +174,11 @@ include 'api/db_foto.php'
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <?php if(empty($row['foto_profil'])) {
-                      echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
+                  <?php if (empty($row['foto_profil'])) {
+                    echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
                   } else {
-                      echo "<img src='uploads/".$row['foto_profil']."' alt='' width='35' height='35' class='rounded-circle'>"; } ?>
+                    echo "<img src='uploads/" . $row['foto_profil'] . "' alt='' width='35' height='35' class='rounded-circle'>";
+                  } ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
@@ -202,54 +204,54 @@ include 'api/db_foto.php'
       </header>
       <!--  Header End -->
       <div class="container-fluid">
-      <div class="row">
-    <div class="col-lg-6 d-flex align-items-stretch">
-        <!-- Yearly Breakup -->
-        <div class="card w-100">
-            <div class="card-body p-4">
+        <div class="row">
+          <div class="col-lg-6 d-flex align-items-stretch">
+            <!-- Yearly Breakup -->
+            <div class="card w-100">
+              <div class="card-body p-4">
                 <h5 class="card-title mb-9 fw-semibold">Summary Tugas</h5>
                 <div class="row align-items-center">
-                    <div class="col-8">
-                        <h4 class="fw-semibold mb-3" id='total-tugas'></h4>
-                        <div>
-                        <i class="ti ti-check text-success" style="margin-bottom: 10px"></i>
-                        <h7 class="fw-semibold mb-3" id='jumlah_tugas_selesai'></h7><br/>
-                        <i class="ti ti-alert-octagon text-danger"></i>
-                        <h7 class="fw-semibold mb-3" id='jumlah_tugas_belum'></h7><br/><br/>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="me-4">
-                                <span class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
-                                <span class="fs-2">Selesai</span>
-                            </div>
-                            <br/>
-                            <div>
-                                <span class="round-8 bg-light-primary rounded-circle me-2 d-inline-block"></span>
-                                <span class="fs-2">Belum Selesai</span>
-                            </div>
-                        </div>
+                  <div class="col-8">
+                    <h4 class="fw-semibold mb-3" id='total-tugas'></h4>
+                    <div>
+                      <i class="ti ti-check text-success" style="margin-bottom: 10px"></i>
+                      <h7 class="fw-semibold mb-3" id='jumlah_tugas_selesai'></h7><br />
+                      <i class="ti ti-alert-octagon text-danger"></i>
+                      <h7 class="fw-semibold mb-3" id='jumlah_tugas_belum'></h7><br /><br />
                     </div>
-                    <div class="col-4">
-                        <div class="d-flex justify-content-center">
-                            <div id="breakup"></div>
-                        </div>
+                    <div class="d-flex align-items-center">
+                      <div class="me-4">
+                        <span class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
+                        <span class="fs-2">Selesai</span>
+                      </div>
+                      <br />
+                      <div>
+                        <span class="round-8 bg-light-primary rounded-circle me-2 d-inline-block"></span>
+                        <span class="fs-2">Belum Selesai</span>
+                      </div>
                     </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="d-flex justify-content-center">
+                      <div id="breakup"></div>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-    </div>
-    <div class="col-lg-6 d-flex align-items-stretch">
-        <div class="card w-100">
-            <div class="card-body p-4">
+          </div>
+          <div class="col-lg-6 d-flex align-items-stretch">
+            <div class="card w-100">
+              <div class="card-body p-4">
                 <div class="mb-4">
-                    <h5 class="card-title fw-semibold">Today Schedule</h5>
+                  <h5 class="card-title fw-semibold">Today Schedule</h5>
                 </div>
                 <ul id="today-schedule" class="timeline-widget mb-0 position-relative mb-n5">
                 </ul>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</div>
 
         <div class="row">
           <div class="col-lg-12 d-flex align-items-stretch">
@@ -279,37 +281,37 @@ include 'api/db_foto.php'
                     </thead>
                     <tbody>
                       <?php
-            $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
-            if ($conn->connect_error) {
-                die("Koneksi gagal: " . $conn->connect_error);
-            }
+                      $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
+                      if ($conn->connect_error) {
+                        die("Koneksi gagal: " . $conn->connect_error);
+                      }
 
-            $sql = "SELECT nama_tugas, mata_kuliah, deadline, deskripsi FROM tugas WHERE status = '0' ORDER BY deadline LIMIT 3";
-            $result = $conn->query($sql);
+                      $sql = "SELECT nama_tugas, mata_kuliah, deadline, deskripsi FROM tugas WHERE status = '0' ORDER BY deadline LIMIT 3";
+                      $result = $conn->query($sql);
 
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    $description = $row['deskripsi'];
-                    $descriptionWords = explode(' ', $description);
-                    $shortDescription = implode(' ', array_slice($descriptionWords, 0, 5));
-                    if (count($descriptionWords) > 5) {
-                        $shortDescription .= '...';
-                    }
+                      if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                          $description = $row['deskripsi'];
+                          $descriptionWords = explode(' ', $description);
+                          $shortDescription = implode(' ', array_slice($descriptionWords, 0, 5));
+                          if (count($descriptionWords) > 5) {
+                            $shortDescription .= '...';
+                          }
 
-                    echo "<tr>";
-                    echo "<td>" . $row['nama_tugas'] . "</td>";
-                    echo "<td>" . $row['mata_kuliah'] . "</td>";
-                    echo "<td>" . $row['deadline'] . "</td>";
-                    echo "<td>" . $shortDescription . "</td>";
-                    echo "<td class='border-bottom-0'><span class='badge bg-danger rounded-3 fw-semibold'>Upcoming</span></td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='4'>Tidak ada data tugas</td></tr>";
-            }
+                          echo "<tr>";
+                          echo "<td>" . $row['nama_tugas'] . "</td>";
+                          echo "<td>" . $row['mata_kuliah'] . "</td>";
+                          echo "<td>" . $row['deadline'] . "</td>";
+                          echo "<td>" . $shortDescription . "</td>";
+                          echo "<td class='border-bottom-0'><span class='badge bg-danger rounded-3 fw-semibold'>Upcoming</span></td>";
+                          echo "</tr>";
+                        }
+                      } else {
+                        echo "<tr><td colspan='4'>Tidak ada data tugas</td></tr>";
+                      }
 
-            $conn->close();
-            ?>
+                      $conn->close();
+                      ?>
                     </tbody>
                   </table>
                 </div>
@@ -321,31 +323,31 @@ include 'api/db_foto.php'
     </div>
   </div>
   <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch('api/fetch_schedule')
-                .then(response => response.json())
-                .then(data => {
-                    const todaySchedule = document.getElementById("today-schedule");
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch('api/fetch_schedule')
+        .then(response => response.json())
+        .then(data => {
+          const todaySchedule = document.getElementById("today-schedule");
 
-                    if (data.length === 0) {
-                        todaySchedule.innerHTML = "<li class='timeline-item'><div class='timeline-desc fs-3 text-dark mt-n1'>No activities scheduled for today.</div></li>";
-                    } else {
-                        data.forEach(activity => {
-                            const item = document.createElement("li");
-                            item.className = "timeline-item d-flex position-relative overflow-hidden";
-                            item.innerHTML = `
+          if (data.length === 0) {
+            todaySchedule.innerHTML = "<li class='timeline-item'><div class='timeline-desc fs-3 text-dark mt-n1'>No activities scheduled for today.</div></li>";
+          } else {
+            data.forEach(activity => {
+              const item = document.createElement("li");
+              item.className = "timeline-item d-flex position-relative overflow-hidden";
+              item.innerHTML = `
                                 <div class="timeline-time text-dark flex-shrink-0 text-end">${activity.subject}</div>
                                 <div class="timeline-badge-wrap d-flex flex-column align-items-center">
                                     <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
                                 </div>
                                 <div class="timeline-desc fs-3 text-dark mt-n1">${activity.activity}</div>
                             `;
-                            todaySchedule.appendChild(item);
-                        });
-                    }
-                });
+              todaySchedule.appendChild(item);
+            });
+          }
         });
-    </script>
+    });
+  </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/sidebarmenu.js"></script>
@@ -353,79 +355,77 @@ include 'api/db_foto.php'
   <script src="libs/apexcharts/dist/apexcharts.min.js"></script>
   <script src="libs/simplebar/dist/simplebar.js"></script>
   <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('api/check_data') 
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('total-tugas').textContent = `${data.total} Total Tugas`;
-                    document.getElementById('jumlah_tugas_selesai').textContent = `${data.selesai} Tugas Selesai`;
-                    document.getElementById('jumlah_tugas_belum').textContent = `${data.belum} Tugas Belum Selesai`;
-                })
-                .catch(error => console.error('Error:', error));
-        });
-    </script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('api/check_data')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('total-tugas').textContent = `${data.total} Total Tugas`;
+          document.getElementById('jumlah_tugas_selesai').textContent = `${data.selesai} Tugas Selesai`;
+          document.getElementById('jumlah_tugas_belum').textContent = `${data.belum} Tugas Belum Selesai`;
+        })
+        .catch(error => console.error('Error:', error));
+    });
+  </script>
   <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch('api/check_data')
-    .then(response => response.json())
-    .then(data => {
-        // Hitung persentase tugas selesai dan belum selesai
-        var selesai_percentage = (data.selesai / data.total) * 100;
-        var belum_percentage = (data.belum / data.total) * 100;
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch('api/check_data')
+        .then(response => response.json())
+        .then(data => {
+          // Hitung persentase tugas selesai dan belum selesai
+          var selesai_percentage = (data.selesai / data.total) * 100;
+          var belum_percentage = (data.belum / data.total) * 100;
 
-        // Setup chart data
-        var breakup = {
+          // Setup chart data
+          var breakup = {
             color: "#adb5bd",
             series: [selesai_percentage, belum_percentage],
             labels: ["Selesai", "Belum Selesai"],
             chart: {
-                width: 180,
-                type: "donut",
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                foreColor: "#adb0bb",
+              width: 180,
+              type: "donut",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              foreColor: "#adb0bb",
             },
             plotOptions: {
-                pie: {
-                    startAngle: 0,
-                    endAngle: 360,
-                    donut: {
-                        size: '75%',
-                    },
+              pie: {
+                startAngle: 0,
+                endAngle: 360,
+                donut: {
+                  size: '75%',
                 },
+              },
             },
             stroke: {
-                show: false,
+              show: false,
             },
             dataLabels: {
-                enabled: false,
+              enabled: false,
             },
             legend: {
-                show: false,
+              show: false,
             },
             colors: ["#5D87FF", "#ecf2ff"],
-            responsive: [
-                {
-                    breakpoint: 991,
-                    options: {
-                        chart: {
-                            width: 150,
-                        },
-                    },
+            responsive: [{
+              breakpoint: 991,
+              options: {
+                chart: {
+                  width: 150,
                 },
-            ],
+              },
+            }, ],
             tooltip: {
-                theme: "dark",
-                fillSeriesColor: false,
+              theme: "dark",
+              fillSeriesColor: false,
             },
-        };
+          };
 
-        var chart = new ApexCharts(document.querySelector("#breakup"), breakup);
-        chart.render();
-    })
-    .catch(error => console.error('Error:', error));
-        });
-</script>
-<!-- <script src="js/dashboard.js"></script> -->
+          var chart = new ApexCharts(document.querySelector("#breakup"), breakup);
+          chart.render();
+        })
+        .catch(error => console.error('Error:', error));
+    });
+  </script>
+  <!-- <script src="js/dashboard.js"></script> -->
 </body>
 
 </html>

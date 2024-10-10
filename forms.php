@@ -3,8 +3,8 @@ session_start();
 
 if (!isset($_SESSION['nim'])) {
   $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
-    header('Location: login'); 
-    exit();
+  header('Location: login');
+  exit();
 }
 
 $nim = $_SESSION['nim'];
@@ -12,7 +12,7 @@ $nim = $_SESSION['nim'];
 $conn = new mysqli('localhost', 'nova', 'Raffifadlika!&55', 'realdatabasenovatix');
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . $conn->connect_error);
 }
 
 $sql = "SELECT * FROM users WHERE nim = ?";
@@ -39,17 +39,17 @@ include 'api/db_foto.php'
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <script>
-        function detectDevice(event) {
-            event.preventDefault();
-            var userAgent = navigator.userAgent.toLowerCase();
-            var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+    function detectDevice(event) {
+      event.preventDefault();
+      var userAgent = navigator.userAgent.toLowerCase();
+      var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
 
-            if (isMobile) {
-                window.location.href = "information_page";
-            } else {
-                window.location.href = "info";
-            }
-        }
+      if (isMobile) {
+        window.location.href = "information_page";
+      } else {
+        window.location.href = "info";
+      }
+    }
   </script>
 </head>
 
@@ -135,7 +135,7 @@ include 'api/db_foto.php'
             <li class="sidebar-item">
               <a class="sidebar-link" href="materi" aria-expanded="false">
                 <span>
-                <i class="ti ti-books"></i>
+                  <i class="ti ti-books"></i>
                 </span>
                 <span class="hide-menu">Learning</span>
               </a>
@@ -159,10 +159,11 @@ include 'api/db_foto.php'
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
+              <?php if (empty($row['nama'])) {
+                echo "<h5>Hi! Please Login First</h5>";
+              } else {
+                echo "<h5>Hi! " . $row['nama'] . "</h5>";
+              } ?>
             </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
@@ -171,10 +172,11 @@ include 'api/db_foto.php'
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <?php if(empty($row['foto_profil'])) {
-                      echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
+                  <?php if (empty($row['foto_profil'])) {
+                    echo "<img src='images/profile/user-1.jpg' alt='' width='35' height='35' class='rounded-circle'>";
                   } else {
-                      echo "<img src='uploads/".$row['foto_profil']."' alt='' width='35' height='35' class='rounded-circle'>"; } ?>
+                    echo "<img src='uploads/" . $row['foto_profil'] . "' alt='' width='35' height='35' class='rounded-circle'>";
+                  } ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
@@ -216,25 +218,25 @@ include 'api/db_foto.php'
                       <select id="mata_kuliah" class="form-control" name="mata_kuliah" onchange="fetchDosen()" required>
                         <option selected disabled>Pilih Mata Kuliah</option>
                         <?php
-            // Koneksi ke database
-            $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
-            if ($conn->connect_error) {
-                die("Koneksi gagal: " . $conn->connect_error);
-            }
+                        // Koneksi ke database
+                        $conn = new mysqli("localhost", "nova", "Raffifadlika!&55", "realdatabasenovatix");
+                        if ($conn->connect_error) {
+                          die("Koneksi gagal: " . $conn->connect_error);
+                        }
 
-            $sql = "SELECT id, activity FROM schedules";
-            $result = $conn->query($sql);
+                        $sql = "SELECT id, activity FROM schedules";
+                        $result = $conn->query($sql);
 
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<option value='" . $row['id'] . "'>" . $row['activity'] . "</option>";
-                }
-            } else {
-                echo "<option value=''>Tidak ada data</option>";
-            }
+                        if ($result->num_rows > 0) {
+                          while ($row = $result->fetch_assoc()) {
+                            echo "<option value='" . $row['id'] . "'>" . $row['activity'] . "</option>";
+                          }
+                        } else {
+                          echo "<option value=''>Tidak ada data</option>";
+                        }
 
-            $conn->close();
-            ?>
+                        $conn->close();
+                        ?>
                       </select>
                     </div>
                     <div class="mb-3">
@@ -260,23 +262,23 @@ include 'api/db_foto.php'
     </div>
   </div>
   <script>
-function fetchDosen() {
-    var mataKuliahId = document.getElementById("mata_kuliah").value;
-    if (mataKuliahId) {
+    function fetchDosen() {
+      var mataKuliahId = document.getElementById("mata_kuliah").value;
+      if (mataKuliahId) {
         var xhr = new XMLHttpRequest();
         var url = "api/fetch_dosen?id=" + mataKuliahId;
         xhr.open("GET", url, true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log("Respons dari server: ", xhr.responseText); // Tambahkan ini untuk debugging
-                document.getElementById("penanggung_jawab").value = xhr.responseText;
-            }
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log("Respons dari server: ", xhr.responseText); // Tambahkan ini untuk debugging
+            document.getElementById("penanggung_jawab").value = xhr.responseText;
+          }
         };
         xhr.send();
-    } else {
+      } else {
         document.getElementById("penanggung_jawab").value = "";
+      }
     }
-}
   </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>
   <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

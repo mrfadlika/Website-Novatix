@@ -32,7 +32,7 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
     }
 }
 
-$sql = "INSERT INTO mailing (send_to, send_from, subyek, isi_pesan, filepath, tanggal_kirim) 
+$sql = "INSERT INTO mailing (send_to, send_from, subyek, isi_pesan, file_path, tanggal_kirim) 
         VALUES ('$tujuan', '$dari', '$subyek', '$isi', '$filepath', NOW())";
 
 if ($conn->query($sql) === TRUE) {

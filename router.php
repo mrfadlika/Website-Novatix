@@ -53,6 +53,9 @@ elseif($uri == 'dosen/add/materi'){
 elseif($uri == 'materi/view'){
     require 'view_materi.php';
 }
+elseif($uri == 'assignment/edit'){
+    require 'edit-tugas.php';
+}
 else {
     require '404.php';
 }

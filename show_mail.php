@@ -225,9 +225,9 @@
                 if ($conn->connect_error) {
                   die("Connection Error: " . $conn->connect_error);
                 }
-        $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, filepath, tanggal_kirim FROM mailing WHERE send_to = ? ORDER BY tanggal_kirim DESC";
+        $sql = "SELECT id, send_to, send_from, subyek, isi_pesan, file_path, tanggal_kirim FROM mailing WHERE send_to = ? ORDER BY tanggal_kirim DESC";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $_SESSION['nim']);
+        $stmt->bind_param("s",$_SESSION['nim']);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {

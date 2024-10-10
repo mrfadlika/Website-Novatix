@@ -1,5 +1,7 @@
-<?php include 'api/check_sesi.php';
-include 'api/db_foto.php'; ?>
+<?php
+include 'api/db_edit_tugas.php'
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -7,6 +9,7 @@ include 'api/db_foto.php'; ?>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Novatix</title>
+  <base href="../" />
   <link rel="shortcut icon" type="image/png" href="images/logos/faviconnova.png" />
   <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
@@ -23,48 +26,6 @@ include 'api/db_foto.php'; ?>
       }
     }
   </script>
-  <style>
-    .announcement-list {
-      width: 80%;
-      margin: auto;
-    }
-
-    .announcement-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #ccc;
-      padding: 10px 0;
-    }
-
-    .announcement-item h2 {
-      margin: 0;
-    }
-
-    .announcement-item p {
-      margin: 5px 0;
-    }
-
-    .delete-button {
-      cursor: pointer;
-      color: red;
-      background: none;
-      border: none;
-      font-size: 16px;
-    }
-
-    .announcement-content {
-      flex: 1;
-    }
-
-    .limited-text {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-      display: inline-block;
-    }
-  </style>
 </head>
 
 <body>
@@ -173,11 +134,10 @@ include 'api/db_foto.php'; ?>
               </a>
             </li>
             <li class="nav-item">
-              <?php if (empty($row['nama'])) {
-                echo "<h5>Hi! Please Login First</h5>";
-              } else {
-                echo "<h5>Hi! " . $row['nama'] . "</h5>";
-              } ?>
+              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
+                <i class="ti ti-bell-ringing"></i>
+                <div class="notification bg-primary rounded-circle"></div>
+              </a>
             </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
@@ -206,7 +166,7 @@ include 'api/db_foto.php'; ?>
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">Change Password</p>
                     </a>
-                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="./logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -219,46 +179,24 @@ include 'api/db_foto.php'; ?>
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Pengumuman</h5>
-              <a type="button" href="pengumuman/add" class="btn btn-outline-secondary m-1" style="margin-bottom: 200px">Buat Pengumuman</a>
+              <h5 class="card-title fw-semibold mb-4">Edit Tugas</h5>
               <div class="card">
-                <div class="card-body p-4">
-                  <?php
-                  $servername = 'localhost';
-                  $username = 'nova';
-                  $password = 'Raffifadlika!&55';
-                  $db_name = 'realdatabasenovatix';
-
-                  $conn = new mysqli($servername, $username, $password, $db_name);
-                  if ($conn->connect_error) {
-                    die("Connection Error: " . $conn->connect_error);
-                  }
-                  $sql = "SELECT id, judul, konten, file_path, created_at FROM pengumuman ORDER BY created_at DESC";
-                  $result = $conn->query($sql);
-
-                  if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                      echo "<div class='announcement-item'>";
-                      echo "<div class='announcement-content'>";
-                      echo "<h2>" . $row["judul"] . "</h2>";
-                      $content_words = explode(' ', $row["konten"]);
-                      $limited_content = implode(' ', array_slice($content_words, 0, 15));
-                      if (count($content_words) > 15) {
-                        $limited_content .= '...';
-                      }
-                      echo "<p>" . $limited_content . "</p>";
-                      echo "</div>";
-                      echo "<span class='ti ti-eye fs-8' style='margin-right: 15px' onclick='viewAnnouncement(" . $row["id"] . ")'></span>";
-                      echo "<span class='ti ti-trash fs-8 text-danger' onclick='deleteAnnouncement(" . $row["id"] . ")'></span>";
-                      echo "<hr>";
-                      echo "</div>";
-                    }
-                  } else {
-                    echo "Tidak ada pengumuman.";
-                  }
-
-                  $conn->close();
-                  ?>
+                <div class="card-body">
+                  <form action="assignment/edit?id=<?php echo $row['id']; ?>" method="post">
+                    <div class="mb-3">
+                      <label for="nama_tugas" class="form-label">Nama Tugas</label>
+                      <input type="text" class="form-control" id="nama_tugas" value="<?php echo $row['nama_tugas']; ?>" name="nama_tugas" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="deadline" class="form-label">Deadline</label>
+                      <input type="date" class="form-control" id="deadline" value="<?php echo $row['deadline']; ?>" name="deadline" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="deskripsi" class="form-label">Deskripsi</label>
+                      <textarea id="deskripsi" class="form-control" name="deskripsi" rows="4" cols="50" required><?php echo $row['deskripsi']; ?></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
                 </div>
               </div>
             </div>
@@ -268,25 +206,22 @@ include 'api/db_foto.php'; ?>
     </div>
   </div>
   <script>
-    function deleteAnnouncement(id) {
-      if (confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')) {
-        fetch('api/delete_announcement', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'id=' + id
-          })
-          .then(response => response.text())
-          .then(data => {
-            alert(data);
-            location.reload();
-          });
+    function fetchDosen() {
+      var mataKuliahId = document.getElementById("mata_kuliah").value;
+      if (mataKuliahId) {
+        var xhr = new XMLHttpRequest();
+        var url = "api/fetch_dosen?id=" + mataKuliahId;
+        xhr.open("GET", url, true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log("Respons dari server: ", xhr.responseText);
+            document.getElementById("penanggung_jawab").value = xhr.responseText;
+          }
+        };
+        xhr.send();
+      } else {
+        document.getElementById("penanggung_jawab").value = "";
       }
-    }
-
-    function viewAnnouncement(id) {
-      window.location.href = "pengumuman/view?id=" + id;
     }
   </script>
   <script src="libs/jquery/dist/jquery.min.js"></script>

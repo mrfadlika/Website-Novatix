@@ -21,7 +21,7 @@ $conn->close();
 // Pastikan nilai yang dikirimkan dijumlahkan menjadi 100%
 $total_tugas = $jumlah_tugas_selesai + $jumlah_tugas_belum;
 
-// Kirim data dalam format JSON
+header('Content-Type: application/json');
 echo json_encode(array(
     'selesai' => $jumlah_tugas_selesai,
     'belum' => $jumlah_tugas_belum,
