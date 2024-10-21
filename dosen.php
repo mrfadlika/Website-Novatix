@@ -140,7 +140,7 @@ if($result->num_rows > 0){
                         </div>
                       </td>";
                       echo "<td>" . $row['created_at'] . "</td>";
-                      echo "<td>" . $actionText . "</td>";
+                      echo "<td style='cursor: pointer'>" . $actionText . "</td>";
                       echo "</tr>";
                     }
                   } else {

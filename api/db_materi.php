@@ -15,7 +15,7 @@ $sql = "SELECT activity, penanggungjawab FROM schedules WHERE id='$matkul_id'";
 $result = $conn->query($sql);
 if($result->num_rows > 0){
     $row = $result->fetch_assoc();
-    $mata_kuliah = $row['mata_kuliah'];
+    $mata_kuliah = $row['activity'];
 } else {
     echo "Mata kuliah tidak ditemukan";
     $conn->close();

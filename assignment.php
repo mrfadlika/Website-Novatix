@@ -293,10 +293,10 @@ include 'api/db_foto.php';
                           $shortDescription .= '...';
                         }
 
-                        $actionText = "<span class='ti ti-trash fs-6' style='margin-right: 20px' onclick='deleteTugas(" . $row['id'] . ")'></span>";
+                        $actionText = "<span class='ti ti-trash fs-6' style='margin-right: 20px; cursor: pointer' onclick='deleteTugas(" . $row['id'] . ")'></span>";
                         if ($row['status'] == 0) {
-                          $actionText .= " <span class='ti ti-circle-check fs-6' onclick='updateStatus(" . $row['id'] . ")'></span>";
-                          $actionText .= "<a class='ti ti-edit fs-6' href='assignment/edit?id=" . $row['id'] . "' style='margin-left: 15px'></a>";
+                          $actionText .= " <span class='ti ti-circle-check fs-6' style='cursor: pointer' onclick='updateStatus(" . $row['id'] . ")'></span>";
+                          $actionText .= "<a class='ti ti-edit fs-6' href='assignment/edit?id=" . $row['id'] . "' style='margin-left: 20px'></a>";
                         }
 
                         echo "<tr>";
