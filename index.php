@@ -142,6 +142,14 @@ include 'api/db_foto.php'
                 <span class="hide-menu">Learning</span>
               </a>
             </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="kumpul_tugas" aria-expanded="false">
+                <span>
+                  <i class="ti ti-upload"></i>
+                </span>
+                <span class="hide-menu">Kumpul Tugas</span>
+              </a>
+            </li>
           </ul>
         </nav>
         <!-- End Sidebar navigation -->

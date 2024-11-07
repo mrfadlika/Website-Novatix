@@ -82,7 +82,7 @@ if($result->num_rows > 0){
                 <div align="center">
                     <a href="dosen/add/tugas" class="btn btn-outline-primary" style="margin-right: 15px">Upload Tugas</a>
                     <a href="dosen/add/materi" class="btn btn-primary" style="margin-right: 15px">Upload Materi</a>
-                    <a href="#" class="btn btn-outline-primary">Data Mahasiswa</a>
+                    <a href="dosen/kumpul_tugas" class="btn btn-outline-primary">Tugas Mahasiswa</a>
                 </div>
             </div>
         </div>
